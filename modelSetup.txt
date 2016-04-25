@@ -1,0 +1,24 @@
+Add to the crudapp/models.py file
+
+from django.db import models
+
+Create a model called 'Members' with columns for 'first_name', 'last_name' and 'description'. This is equivalent to a table called 'Memnbers' with fields for 'first_name', 'last_name' and 'description'.
+
+class Members(models.Model):
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    description = models.CharField(max_length=600)
+    # pub_date = models.DateTimeField('date published')
+    def __str__(self):
+        return ' '. join([ self.first_name, self.last_name, ])
+
+Give the model an admin interface,
+
+crudapp/admin.py
+
+from .models import Question
+
+admin.site.register(Question)
+
+
+Go to http://localhost:8000/admin and you will see a model called 'Memberss' with effectively rows of the database or as we say in Django instances of the class Member. Note Django places an extra 's' on the class name in admin. Using the Django admin you can now view, edit and delete this model. 
