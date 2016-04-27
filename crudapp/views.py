@@ -15,7 +15,7 @@ def member_new(request):
     if request.method == "POST":
         form = MemberForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False) #don't save model just yet
+            post = form.save(commit=False)
             # post.author = request.user
             # post.published_date = timezone.now()
             print 'this is just BEFORE save'
@@ -37,7 +37,7 @@ def edit_new(request, id):
             # post.author = request.user
             # post.published_date = timezone.now()
             post.save()
-            return redirect('init') #post_detail is the name of the view we want to go to
+            return redirect('init')
     else:
         form = MemberForm(instance=post)
     return render(request, 'member_edit.html', {'form': form})
