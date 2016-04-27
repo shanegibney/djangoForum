@@ -1,11 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Members
-from django.http import HttpResponse
-# from django.core.mail import send_mail
 from django import forms
 from .forms import MemberForm
-# from mysite.contact.forms import ContactForm
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 
 # Create your views here.
@@ -16,8 +12,6 @@ def init(request):
     return render(request, 'index.html', context)
 
 def member_new(request):
-    # print context
-    # return render(request, 'post_detail.html', context)
     if request.method == "POST":
         form = MemberForm(request.POST)
         if form.is_valid():
@@ -27,7 +21,8 @@ def member_new(request):
             print 'this is just BEFORE save'
             post.save()
             print 'this is just after save'
-            return redirect('post_detail', pk=post.pk) #post_detail is the name of the view we want to go to
+            # return redirect('post_detail', pk=post.pk)
+            return redirect('init')
     else:
         form = MemberForm()
     return render(request, 'member_edit.html', {'form': form})
@@ -52,11 +47,11 @@ def delete_new(request, id):
     post.delete()
     return redirect(init)
 
-def post_detail(request, pk):
-    print 'this is the post_detail view'
-    # post = get_object_or_404(Members, pk=pk)
-    # return render(request, 'post_detail.html', {'post': post})
-    return redirect('init')
+# def post_detail(request, pk):
+#     print 'this is the post_detail view'
+#     # post = get_object_or_404(Members, pk=pk)
+#     # return render(request, 'post_detail.html', {'post': post})
+#     return redirect('init')
 
 # def get_name(request):
 #     # if this is a POST request we need to process the form data

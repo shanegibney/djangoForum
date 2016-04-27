@@ -14,16 +14,3 @@ class Members(models.Model):
     # pub_date = models.DateTimeField('date published')
     def __str__(self):
         return ' '. join([ self.first_name, self.last_name, ])
-
-<<<<<<< HEAD
-# class ContactForm(forms.Form):
-#     subject = forms.CharField()
-#     email = forms.EmailField(required=False)
-#     message = forms.CharField()
-
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=200)
-#     votes = models.IntegerField(default=0)
-=======
->>>>>>> 3732b5705a78943f0a45b816cecb68c620431858

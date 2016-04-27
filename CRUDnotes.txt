@@ -1,0 +1,53 @@
+Before styarting this section it would be a good idea to include Bootstrap to make use of the classes in the html, but it is not necessary. It is only to make it look nice! To do that add the following lines inside the head tags of index.html.
+<pre><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"></pre>
+CRUD is an acronym for Create, Read, Update and Delete. First we would like to make a form and send this data to the databse or our Members model. This will be the Create part of CRUD. 
+First we need to create a form. But to do that we need to tell Django which fields from the model members to put in the form. Create a new file called forms.py and place it in the same place as models.py. forms.py must import forms from Django and your model Members from models. This done by adding to the top of forms.py
+<pre>from django import forms
+from .models import Members</pre>
+We create a new model here for the form, but it takes from the current model Members. This is done with a class Meta and we can choose which fields from Members we want in the form,
+<pre> class MemberForm(forms.ModelForm):
+    class Meta:
+        model = Members
+        # which fields to put in form
+        fields = ('first_name', 'last_name', 'description')</pre>
+We need a link to the url which we are calling 'member_new'. So in urls.py add in,
+<pre>url(r'^post/new/$', home.member_new, name='member_new'),</pre>
+This gives the url a name of 'member_new'. To get to this url you need a hyper-link in index.html,
+<pre>&lta href="{% url 'member_new' %}">Add a post&lt/a></pre>
+This causes Django to look in urls.py for a url named 'member_new' where it is associated with the url 'post/new/'. Then Django looks through all these urls again to find the url 'post/new/' and see what view it is associated with. In this case the view is 'home.members_new'. Now will create this view in views.py,
+<pre>def member_new(request):<pre>
+Django first checks if the "POST" method exists. Of course it doesn't because we haven't used a form yet. Therefore this section is ignored and Django carries on to the 'else'.
+<pre>    if request.method == "POST":
+        ..... we will come here after the form is sent ......
+    else:
+        form = MemberForm()
+    return render(request, 'member_edit.html', {'form': form})</pre>
+The MemberForm which we created earlier and has the fields in it is now passed to 'form', and the last line renders 'member_edit,html' by sending it 'form'.
+We need to create 'member_edit.html' in the templates folder. This file will extend index.html. To create the form itself we only need to wrap in form tags {{ form.as_p }} like this,
+<pre>{% extends 'index.html' %}
+
+{% block content %}
+    &lth1>Member form&lt/h1>
+    &ltform method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}in the form
+        &ltbutton type="submit" class="save btn btn-default">Save&lt/button>
+    &lt/form>
+{% endblock %}</pre>
+This creates a block called 'content' which will be placed by Django in index.html if we add to index.html the following,
+<pre>{% block content %}
+{% endblock %}</pre> 
+When you run the server you should have a link on the index.html page to a form with fields. But you won't be able to submit because we haven't finihsed writing the view 'member_new', which is where this form will submit to. But this time "POST" does exist and so the if statement is not ignored. We need to fill this view in so that completed it looks like this,
+<pre>def member_new(request):
+    if request.method == "POST":
+        form = MemberForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False) #don't save model just yet
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = MemberForm()
+    return render(request, 'member_edit.html', {'form': form})</pre>
+You can see this passes everything in POST to form, validates form with '.is_valid'. The line 'form.save...' saves the form data to memory, not to the database yet. 'post.save()' does that. Therefore this is where a new row is added to the database or where the actual 'create' in Crud happens. The next line redirects us to the 'init' view. Which recreates the home page and the table of data from the 'Members' model.
+This concludes the 'C' or 'create' in CRUD and we have already dealt with the 'R' for 'read'.
+

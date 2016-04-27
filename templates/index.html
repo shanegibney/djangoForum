@@ -38,7 +38,7 @@
 </nav>
 
   <div>
-  Add a new post: <a href="{% url 'member_new' %}" alt="add a post"><span class="glyphicon glyphicon-plus"></span></a>
+  Add a new post: <a href="{% url 'member_new' %}"><span class="glyphicon glyphicon-plus"></span></a>
   </div>
   <div class="content container">
     <div class="row">
@@ -65,7 +65,7 @@
                 <td>{{ item.first_name }}</td>
                 <td>{{ item.last_name }}</td>
                 <td>{{ item.description }}</td>
-                <td class="icon-nowrap"> <a href="{% url 'edit_new' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a href="{% url 'edit_new' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td><a href="{% url 'delete_new' item.id %}"><span class="glyphicon glyphicon-trash"></span></a> </td>
               </tr>
               {% endfor %}
