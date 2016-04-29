@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Members
 from django import forms
 from .forms import MemberForm
-from django.shortcuts import redirect
+from django.utils import timezone
 
 # Create your views here.
 def init(request):
@@ -16,8 +16,8 @@ def member_new(request):
         form = MemberForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            # post.author = request.user
-            # post.published_date = timezone.now()
+            post.author = request.user
+            post.pub_date = timezone.now()
             post.save()
             # return redirect('post_detail', pk=post.pk)
             return redirect('init')
@@ -33,8 +33,8 @@ def edit_new(request, id):
         if form.is_valid():
             post = form.save(commit=False) #don't save model just yet
             print request.user
-            # post.author = request.user
-            # post.published_date = timezone.now()
+            post.author = request.user
+            post.published_date = timezone.now()
             post.save()
             return redirect('init')
     else:
@@ -45,7 +45,7 @@ def edit_new(request, id):
 def delete_new(request, id):
     post = get_object_or_404(Members, pk=id)
     post.delete()
-    return redirect(init)
+    return redirect('init')
 
 # def post_detail(request, pk):
 #     print 'this is the post_detail view'

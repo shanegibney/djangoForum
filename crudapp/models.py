@@ -9,6 +9,7 @@ class Members(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     description = models.CharField(max_length=600)
-    # pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published')
+    author = models.CharField(max_length=30)
     def __str__(self):
         return ' '. join([ self.first_name, self.last_name, ])
