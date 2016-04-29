@@ -6,11 +6,11 @@ from django.shortcuts import redirect
 
 # Create your views here.
 def init(request):
-    print 'this is the init view'
     details = reversed(Members.objects.all())
     context = {'details': details}
     return render(request, 'index.html', context)
 
+#create new post
 def member_new(request):
     if request.method == "POST":
         form = MemberForm(request.POST)
@@ -18,15 +18,14 @@ def member_new(request):
             post = form.save(commit=False)
             # post.author = request.user
             # post.published_date = timezone.now()
-            print 'this is just BEFORE save'
             post.save()
-            print 'this is just after save'
             # return redirect('post_detail', pk=post.pk)
             return redirect('init')
     else:
         form = MemberForm()
     return render(request, 'member_edit.html', {'form': form})
 
+#edit a post
 def edit_new(request, id):
     post = get_object_or_404(Members, pk=id)
     if request.method == "POST":
@@ -42,6 +41,7 @@ def edit_new(request, id):
         form = MemberForm(instance=post)
     return render(request, 'member_edit.html', {'form': form})
 
+#delete a post
 def delete_new(request, id):
     post = get_object_or_404(Members, pk=id)
     post.delete()

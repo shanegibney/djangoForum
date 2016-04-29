@@ -4,4 +4,3 @@ from .models import Members
 
 # Register your models here.
 admin.site.register(Members)
-# admin.site.register(NameForm)

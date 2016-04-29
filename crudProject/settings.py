@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# AUTH_USER_MODEL = 'accounts.User'
+
+# AUTHENTICATION_BACKENDS = ('accounts.backends.EmailAuth')
 
 # Application definition
 
@@ -39,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'crudapp.apps.CrudappConfig',
     'crudapp',
-    'accounts',
+    # 'accounts',
+    'django_forms_bootstrap',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -126,3 +130,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+LOGIN_REDIRECT_URL = '/accounts/loggedin/'

@@ -1,11 +1,9 @@
 from __future__ import unicode_literals
 from django.db import models
 from django import forms
+from django.utils import timezone
 
 # Create your models here.
-
-class NameForm(models.Model):
-    your_name = forms.CharField(label='Your name', max_length=100)
 
 class Members(models.Model):
     first_name = models.CharField(max_length=200)
