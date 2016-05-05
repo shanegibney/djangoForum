@@ -1,51 +1,157 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Members
+from .models import Members, TopicModel, PostModel
+from django.db.models import Count, Max
 from django import forms
-from .forms import MemberForm
+from .forms import MemberForm, TopicForm, PostForm
 from django.utils import timezone
+from datetime import date, timedelta
 
 # Create your views here.
 def init(request):
-    details = reversed(Members.objects.all())
-    context = {'details': details}
-    return render(request, 'index.html', context)
+    # tModel = reversed(TopicModel.objects.all())
+    # pModel = reversed(PostModel.objects.all())
+    # pModel = reversed(PostModel.objects.filter(topicid_id=pk).order_by('-pub_date')[0])
+    # p1 = PostModel.objects.order_by('topicid_id')
+    # p2 = p1.order_by('-pub_date')[0]
+    # pModel = PostModel.objects.order_by('topicid_id').order_by('-pub_date')[0]
+    # context = {'tModel': tModel, 'pModel': pModel}
+    # nums = PostModel.objects.values('topicid').annotate(yoke=Count('post'))
 
-#create new post
-def member_new(request):
+    # get the topicid of the which has the latest date
+    # nums = PostModel.objects.values('topicid').latest('pub_date')
+
+    # gives value of all topicid's
+    # nums = PostModel.objects.values('topicid')
+
+    # topics of the latest 20 posts
+    # nums = PostModel.objects.filter(
+    #     topicid__gt=0
+    #     ).distinct().annotate(a_count=Count(
+    #     'post')
+    #     ).order_by('-pub_date').filter(a_count__gte=1)[:5]
+    # theSQL = nums.query
+    # Reservation.objects.filter(
+    #     restaurant__city_id__gt=0
+    #     ).distinct().annotate(city_count=Count(
+    #     'restaurant_id')
+    #     ).order_by('-reservationdate').filter(city_count__gte=1)[:20]
+
+    # num = PostModel.objects.values('author').annotate(total=Count('post'))#groups by author and counts the posts for each author
+    # num = PostModel.objects.values('topicid').annotate(most_recent=Count('post')).latest('pub_date')
+    # num = PostModel.objects.values('topicid').annotate(recent=Count('post'))####
+    # current =  num[0].recent
+    # num = PostModel.objects.annotate(Count('author'))
+    # current = PostModel.objects.latest('pub_date')
+    # detail = PostModel.objects.values('topicid.topic').aggregate(Max('pub_dat'))
+    # Book.objects.all().aggregate(Max('price'))
+    # Transaction.objects.values('order_id').annotate(total=Sum('value'))
+    pModel = PostModel.objects.raw('select *, max(pub_date) from crudapp_postmodel group by topicid_id order by pub_date desc LIMIT 0,10')
+    print 'pModel: %s' %pModel
+    context = {'pModel': pModel, 'current_time': timezone.now()}
+    return render(request, 'forum.html', context)
+
+
+#display thread of posts and form for next post
+def thread(request, id):
     if request.method == "POST":
-        form = MemberForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.pub_date = timezone.now()
-            post.save()
+        print 'we are inside POST'
+        pk = id
+        tform = get_object_or_404(TopicModel, pk=id)
+        # Pform = PostForm(request.POST, instance=tform)
+        Pform = PostForm(request.POST)
+        # tform = TopicModel.objects.get(pk=id)
+        if Pform.is_valid():
+            pform = Pform.save(commit=False)
+            pform.topicid = tform
+            pform.author = request.user
+            pform.pub_date = timezone.now()
+            pform.save()
             # return redirect('post_detail', pk=post.pk)
+            return redirect('thread', id)
+    else:
+        pk=id
+        print 'topic pk is : %s' %pk
+        pModel = reversed(PostModel.objects.all().filter(topicid_id=pk))
+        # threadTopic = reversed(TopicModel.objects.all().filter(id=pk))
+        # threadTopic = TopicModel.objects.raw('select topic from crudapp_topicmodel where id = %d', [pk])
+        postform = PostForm()
+        # print 'threadTopic is %s' %threadTopic
+        # for yoke in threadTopic:
+        #     print 'oops'
+        #     topic = yoke.topicid.topic
+        # print 'topic is: %s' %topic
+    return render(request, 'thread.html', {'pModel': pModel, 'postform' : postform, 'current_time': timezone.now()})
+#create new post
+# def topic_new(request):
+#     if request.method == "POST":
+#         form = MemberForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.author = request.user
+#             post.pub_date = timezone.now()
+#             post.save()
+#             # return redirect('post_detail', pk=post.pk)
+#             return redirect('init')
+#     else:
+#         form = MemberForm()
+#     return render(request, 'member_edit.html', {'form': form})
+
+
+# def edit_post(request, thread_id, post_id):# example from wearesocial
+#form for topic and first post
+def topic_form(request):
+    if request.method == "POST":
+        Tform = TopicForm(request.POST)
+        Pform = PostForm(request.POST)
+        if Tform.is_valid() and Pform.is_valid():
+            tform = Tform.save(commit=False)
+            # tform.extra = 'blah'
+            tform.topicAuthor = request.user
+            tform.save() #returns request and id
+            pform = Pform.save(commit=False)
+            pform.topicid = tform
+            print 'pform.topicid: %s' %pform.topicid
+            pform.author = request.user
+            pform.pub_date = timezone.now()
+            pform.save()
             return redirect('init')
     else:
-        form = MemberForm()
-    return render(request, 'member_edit.html', {'form': form})
+        topicform = TopicForm()
+        postform = PostForm()
+    return render(request, 'new_topic.html', {'topicform': topicform, 'postform': postform})
 
 #edit a post
 def edit_new(request, id):
-    post = get_object_or_404(Members, pk=id)
+    post = get_object_or_404(PostModel, pk=id)
     if request.method == "POST":
-        form = MemberForm(request.POST, instance=post)
+        form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save(commit=False) #don't save model just yet
-            print request.user
-            post.author = request.user
-            post.published_date = timezone.now()
+            # post.author = request.user
+            post.pub_date = timezone.now()
             post.save()
-            return redirect('init')
+
+            post = get_object_or_404(PostModel, pk=id)
+            id = post.topicid_id
+
+            return redirect('thread', id)
     else:
         form = MemberForm(instance=post)
     return render(request, 'member_edit.html', {'form': form})
 
-#delete a post
+#delete a post, actually replaces post with a message
 def delete_new(request, id):
-    post = get_object_or_404(Members, pk=id)
-    post.delete()
-    return redirect('init')
+    post = get_object_or_404(PostModel, pk=id)
+    # post.delete()
+    form = PostForm(instance=post)
+    # post.post = "This post was removed by " + str(request.user)
+    post.post = "This post has been removed by the author"
+    post.save()
+    print 'end of delete id is %s' %id
+    #id is the post's id and is used to get the id of the topic
+    #id to be sent needs to be the topicid_id
+    id = post.topicid_id#this is the id of the topic
+    return redirect('thread', id)
 
 # def post_detail(request, pk):
 #     print 'this is the post_detail view'

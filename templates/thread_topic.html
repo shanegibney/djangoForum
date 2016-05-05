@@ -1,0 +1,7 @@
+{% extends 'thread.html' %} {% block theTopic %}
+{% if pModel %}
+  {% for instance in pModel %}
+    Topic: {{ instance.topicid.topic}}
+  {% endfor %}
+{% endif %}
+{% endblock %}

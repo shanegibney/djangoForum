@@ -1,0 +1,29 @@
+{% extends 'index.html' %} {% block content %}
+<div>
+  {% if user.is_authenticated %}Add a New Topic: <a href="{% url 'topic_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}
+</div>
+<div class="post">
+  {% if pModel %}
+  <div class="table-responsive">
+    <table class='table table-striped table-hover'>
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Topic started by</th>
+          <th>Last Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in pModel %}
+        <tr>
+          <td><a href="{% url 'thread' item.topicid_id %}">{{ item.topicid.topic }}</a></td>
+          <td>{{ item.topicid.topicAuthor }}</td>
+          <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
