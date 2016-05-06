@@ -1,9 +1,15 @@
 {% extends 'index.html' %}
 
 {% block content %}
+    {% if topicform %}
     <h1>New Topic Form</h1>
+    {% else %}
+    <h1>Edit post</h1>
+    {% endif %}
     <form method="POST" class="post-form">{% csrf_token %}
+      {% if topicform %}
         {{ topicform.as_p }}
+      {% endif %}
         {{ postform.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>

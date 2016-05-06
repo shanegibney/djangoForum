@@ -1,15 +1,15 @@
 # from django.db import models
 from django import forms
-from .models import Members, TopicModel, PostModel
+from .models import TopicModel, PostModel
 from tinymce.widgets import TinyMCE
 
 
-class MemberForm(forms.ModelForm):
-    # print 'this is the MemberForm'
-    class Meta:
-        model = Members
-        # which fields to put in form
-        fields = ('topic', 'post')
+# class MemberForm(forms.ModelForm):
+#     # print 'this is the MemberForm'
+#     class Meta:
+#         model = Members
+#         # which fields to put in form
+#         fields = ('topic', 'post')
 
 class TopicForm(forms.ModelForm):
     class Meta:

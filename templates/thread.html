@@ -1,15 +1,12 @@
 {% extends 'index.html' %} {% block content %}
 <div class="post">
-  <h3>New Post</h3>
-  <form method="POST" class="post-form">{% csrf_token %} {{ postform.as_p }}
-    <button type="submit" class="save btn btn-default">Post</button>
-  </form>
-  {% block theTopic %} {% endblock %}
-</div>
-<div>
-{% for item in threadTopic %}
-  <h3>{{ item.topic }}</h3>
-{% endfor %}
+  <div>
+    {% if threadTopic %}
+    {% for item in threadTopic %}
+    <h3>{{ item.topic }} </h3><h5>({{ item.views }} views)</h5>
+    {% endfor %}
+    {% endif %}
+  </div>
 </div>
 <div class="post">
   {% if pModel %}
@@ -28,7 +25,7 @@
         {% for item in pModel %}
         <tr>
           <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'delete_new' item.id %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}</td>
-          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit_new' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
+          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit_post' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
           <td>{{ item.post}}</td>
           <td>{{ item.author }}</td>
           <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}}</td>
@@ -39,4 +36,10 @@
     {% endif %}
   </div>
 </div>
+{% if user.is_authenticated %}
+<h3>New Post</h3>
+<form method="POST" class="post-form">{% csrf_token %} {{ postform.as_p }}
+  <button type="submit" class="save btn btn-default">Post</button>
+</form>
+{% endif %}
 {% endblock %}

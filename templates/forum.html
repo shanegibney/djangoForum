@@ -9,8 +9,10 @@
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Topic started by</th>
+          <th>Topic Started By</th>
           <th>Last Active</th>
+          <th class="table-cell-center">Views</th>
+          <th class="table-cell-center">Posts</th>
         </tr>
       </thead>
       <tbody>
@@ -19,11 +21,14 @@
           <td><a href="{% url 'thread' item.topicid_id %}">{{ item.topicid.topic }}</a></td>
           <td>{{ item.topicid.topicAuthor }}</td>
           <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}}</td>
+          <td class="table-cell-center">{{ item.topicid.views }}</td>
+          <td class="table-cell-center">{{ item.freq }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
     {% endif %}
+
   </div>
 </div>
 {% endblock %}
