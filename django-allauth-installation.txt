@@ -1,0 +1,102 @@
+There is a useful django-allauth video tutorial at <a href="https://youtu.be/1yqKNQ3ogKQ">Create third party Facebook login in Django
+</a>. The document below simply follows that. Documentation can be found at <a href="http://django-allauth.readthedocs.io/en/latest/installation.html">django-alluth documentation</a>.
+I am running Django 1.9 and will install django-allauth 0.25 Setup a virtual environment if you haven't already.
+<pre>$ pip install django-allauth</pre>
+Check the packages in your virtual environment with,
+<pre>$ pip list</pre>
+Put these into your requirements.txt file with,
+<pre>$ pip freeze -> requirements.txt</pre>
+You can install the packages in requirements.txt to your virtual environment or whatever environment you are in with,
+<pre>$ pip install -r requirements.txt</pre>
+For this example the django project name is `crudProject' and the app name is `crudapp'.
+In settings.py add appropriately to TEMPLATES so that it looks like this,
+<pre>TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+            ],
+        },
+    },
+]</pre>
+Bear in mind,
+<pre>'django.template.context_processors.request',</pre>
+may already be in the `context_processors'
+Then add to settings.py,
+<pre>AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)</pre>
+Then add to INSTALLED_APPS
+<pre>INSTALLED_APPS = (
+    ...
+    # The Django sites framework is required
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+)</pre>
+and also add to settings.py,
+<pre>SITE_ID = 1</pre>
+To urlpattersn = [...] in urls.py add,
+<pre>url(r'^accounts/', include('allauth.urls')),</pre>
+To see the accounts urls available to you go to localhost:8000/accounts/ be sure not to omit the trailing '/'.
+Next run a migrate,
+<pre>$ python manage.py migrate
+python manag.py runserver</pre>
+And go to localhost:8000/accounts/admin You should see in admin, ACCOUNTS, SITES and SOCIALACCOUNTS.
+img Selection_015.png
+We need to go to the <a href="https://developers.facebook.com/">Facebook Developer Site</a>. Signup to get account or login with your Facebook credentials if you already have a Facebook account.
+In the `My Apps' pull down menu select `Add a New App`
+img Selection_016.png
+and then click on `Website`
+img Selection_017.png
+Put in the name of your app which in my case is `crudapp`
+img Selection_018.png
+then continue to `Create New Facebook App ID`. You'll be asked for an email after that, choose a category for your app. I choose `Education'. Next click `Create App ID`
+img Selection_019.png
+I skipped down to the bottom of the page
+img Selection_021.png
+and for `Site URL:' I put in localhost:8000, then click `Next'.
+Then choose `Login'
+img Selection_022.png
+Then go to the `Apps' pulldown menu at the top right of the page and choose `crudapp`. This should take you to the app's dashboard and you should see the app ID and secret key which you can reveal my clicking on the `Show' button.
+img Selection_023.png
+Now go back to your browser and navigate to localhost:8000/admin and go into `SITES` and click on `example.com`
+img Selection_024.png
+Change the `Domain name` and `Display name` to the following,
+img Selection_025.png
+Now localhost:800 has site ID: 1. Back in the admin home click on `Social applications' under `SOCIALACCOUNTS'.
+img Selection_026.png
+Next click `ADD SOCIAL APPLICATION` which is over on the top right of the screen. Fill in the `Provider`, `Name` and the `Client id` and `Secret key` which we looked at on the facebook developer site. Click the `localhost:8000` under `Available sites`.
+img Selection_27.png
+Move `localhost:8000` across from `Available sites` to `Chosen sites` by clicking the little right arrow between them, while it is highlighted.
+img Selection_29.png
+Then click `SAVE` at the bottom right of the page. Now logout of `admin and navigate to http://localhost:8000/accounts/login`
+This should bring up a simple unstyled form,
+img selection_30.png
+You need to return to the Facebook developer site and under `App Review` set to `Yes` under `Make crudapp public?`
+img selection_31.png
+Logout of the Facebook developer site and all Facebook accounts and go back to http://localhost:8000/accounts/login/
+This will bring you to http://localhost:8000/accounts/loggedin/#_=_ where you will see `Page not found (404)`. To correct this,
+In settings.py add,
+<pre>LOGIN_REDIRECT_URL = '/'</pre>
+to redirect to the homepage after login.
+Next add to your app the a `templates` directory and inside that a directory called `account`. In your directory where you setup your virtual environment you will find a lib directory from there go to,
+<pre>lib/python2.7/site-packages/allauth/templates</pre>
+where you should find a base.html templates file copy this to your app/templates directory.
+<pre>$ cp base.html ~/djangoForum/djangoForum/crudapp/templates/</pre>
+Then change directory into `account` and you will see html template files for login.html, logout.html, signup.html etc. These files need to be copied to your app's templates/account directory.
+<pre>$ cp -r * ~/djangoForum/djangoForum/crudapp/templates/account/</pre>
+You can now style these templates.
+To see the accounts urls available to you go to localhost:8000/accounts/ be sure not to omit the trailing '/'.

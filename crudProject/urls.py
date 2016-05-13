@@ -17,13 +17,5 @@ urlpatterns = [
 
     # example from wearesocial
     # url(r'^post/delete/(?P<thread_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
-
-    # Auth-related URLs:
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
-    url(r'^accounts/loggedin/$', 'crudProject.views.loggedin', name='loggedin'),
-
-    # Registration URLs
-    url(r'^accounts/register/$', 'crudProject.views.register', name='register'),
-    url(r'^accounts/register/complete/$', 'crudProject.views.registration_complete', name='registration_complete'),
+    url(r'^accounts/', include('allauth.urls')),
     ]
