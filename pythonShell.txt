@@ -1,6 +1,0 @@
-Access the Python shell with,
-<pre>$ python manage.py shell</pre>
-Connect with the models in your app using,
-<pre>>>> from $lt;appname>.models import $lt;model1>, $lt;model2></pre>
-Have a look at everything in the models1
-<pre>models.objects.all()</pre>
