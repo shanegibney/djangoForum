@@ -32,20 +32,21 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if not user.is_authenticated %}
-        <li><a href="/">Login</a></li>{% endif %} {% if user.is_authenticated %}
-        <li><a href="/">Logout</a></li>{% endif %} {% if not user.is_active %}
-        <li><a href="/">Register</a></li>{% endif %}
+        <li><a href="{% url 'account_login' %}">Login</a></li>{% endif %} {% if user.is_authenticated %}
+        <li><a href="{% url 'account_logout' %}">Logout</a></li>{% endif %} {% if not user.is_active %}
+        <li><a href="{% url 'account_signup' %}">Register</a></li>{% endif %}
       </ul>
     </div>
   </nav>
-
   <div class="content container">
     <div class="row">
       <div class="col-md-8">
         {% if user.is_authenticated %} You are logged in as: {{ user.username }} {% endif %}
         </br>
         </br>
-        {% block content %} {% endblock %}
+        {% block homepage %} {% endblock %}
+        {% block authentication %}
+        {% endblock %}
       </div>
     </div>
   </div>

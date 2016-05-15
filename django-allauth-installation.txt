@@ -99,4 +99,3 @@ where you should find a base.html templates file copy this to your app/templates
 Then change directory into `account` and you will see html template files for login.html, logout.html, signup.html etc. These files need to be copied to your app's templates/account directory.
 <pre>$ cp -r * ~/djangoForum/djangoForum/crudapp/templates/account/</pre>
 You can now style these templates.
-To see the accounts urls available to you go to localhost:8000/accounts/ be sure not to omit the trailing '/'.

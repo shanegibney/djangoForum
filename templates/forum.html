@@ -1,4 +1,4 @@
-{% extends 'index.html' %} {% block content %}
+{% extends 'index.html' %} {% block homepage %}
 <div>
   {% if user.is_authenticated %}Add a New Topic: <a href="{% url 'topic_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}
 </div>

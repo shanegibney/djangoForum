@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-{% block content %}
+{% block homepage %}
     <h1>Member form</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}

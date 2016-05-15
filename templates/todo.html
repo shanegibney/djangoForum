@@ -1,19 +1,16 @@
-{% extends 'index.html' %} {% block content %}
+{% extends 'index.html' %} {% block homepage %}
 <div class="post">
-  <ul>
+  <ol>
+    <li>Make post and topics forms required</li>
     <li>Can only edit posts for 24 hrs</li>
-    <li>Show topic and views in thread.html</li>
-    <li>Profile page for each user</li>
-    <li>Contact each other via email</li>
-    <li>Respeonsive to different screens</li>
+    <li>Include Google social authentication and maybe Twitter</li>
+    <li>Profile page for each user with ability to contact each other via email</li>
+    <li>Profile name, date registered, date last logged out, all posts with paginations</li>
+    <li>Responsive to different screens</li>
     <li>Pagination button on forum and thread</li>
     <li>App for sharing files</li>
-    <li>Add local Bootstrap to run in case CDN not working</li>
     <li>Get tinyMCE to work with forms</li>
-    <li>Include OAuth</li>
-    <li>Add email to registration</li>
-    <li>Users can upload photo or default pic is created with the first letter of their name on a different colour background for each person with that letter</li>
-    <li>Make post and topics forms required</li>
-  </ul>
+    <li>Fix: after logout going immediately to registration brings up logged in messgae of previous user</li>
+  </ol>
 </div>
 {% endblock %}
