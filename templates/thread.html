@@ -1,12 +1,13 @@
 {% extends 'index.html' %} {% block homepage %}
-<div class="post">
-  <div>
+<!-- <div class="post"> -->
+<div>
     {% if threadTopic %}
     {% for item in threadTopic %}
-    <h3>{{ item.topic }} </h3><h5>({{ item.views }} views)</h5>
+    <h2><strong>Topic: </strong> {{ item.topic }}</h2>
+    <h4><strong>Topic started by </strong><a href="{% url 'profile' item.author_id %}">{{ item.topicAuthor}}</a></h4>
+    <p>{{ item.views }} views, {{ numtopicposts.count }} posts, {{ numtopicusers.count }} users</p>
     {% endfor %}
     {% endif %}
-  </div>
 </div>
 <div class="post">
   {% if pModel %}
@@ -24,11 +25,11 @@
       <tbody>
         {% for item in pModel %}
         <tr>
-          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'delete_new' item.id %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}</td>
-          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit_post' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
+          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'delete' item.id %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}</td>
+          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
           <td>{{ item.post}}</td>
-          <td>{{ item.author }}</td>
-          <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}}</td>
+          <td><a href="{% url 'profile' item.user_id %}">{{ item.author}}</a></td>
+          <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}} ago</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.contrib.auth.models import User
 from django import forms
 from django.utils import timezone
 from tinymce.models import HTMLField
@@ -15,19 +16,21 @@ from tinymce.models import HTMLField
 #         return ' '. join([ self.first_name, self.last_name, ])
 
 class TopicModel(models.Model):
-    topic = models.CharField(max_length=100)
-    topicAuthor = models.CharField(max_length=100)
+    topic = models.CharField(max_length = 100)
+    topicAuthor = models.CharField(max_length = 100)
+    author = models.ForeignKey(User)
     # topic = HTMLField(blank=True)
-    views = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default = 0)
 
     def __str__(self):              # __unicode__ on Python 2
             return self.topic
 
 class PostModel(models.Model):
-    post = HTMLField(blank=True, max_length=1000)
+    post = HTMLField(blank = True, max_length = 1000)
     pub_date = models.DateTimeField('date published')
-    author = models.CharField(max_length=30)
-    topicid = models.ForeignKey(TopicModel, related_name = 'posts')
+    author = models.CharField(max_length = 30)
+    user =  models.ForeignKey(User)
+    topic = models.ForeignKey(TopicModel)
     # topicid = models.ForeignKey(TopicModel, on_delete=models.CASCADE, null=True)
 
     def __str__(self):              # __unicode__ on Python 2
