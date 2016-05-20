@@ -1,0 +1,15 @@
+{% extends 'index.html' %} {% block homepage %}
+<h3>Contact Form</h3>
+<!-- <form method="POST" class="post-form">{% csrf_token %} {{ postform.as_p }}
+  <button type="submit" class="save btn btn-default">Submit</button>
+</form> -->
+<div class="well">
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+      <button type="submit" class="save btn btn-default">Send</button>
+    </div>
+</form>
+</div>
+{% endblock %}
