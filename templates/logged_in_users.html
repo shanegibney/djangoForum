@@ -1,6 +1,14 @@
 {% extends 'index.html' %}
 {% load crudapp_tags %}
+<p>aaa</p>
 {% block homepage %}
+<p>bbb</p> <!-- Only this displays -->
+{% if form %}
+<p>Form exists</p>
+{% endif %}
+{% for item in form %}
+<p>This is {{ item }}</p>
+{% endfor %}
 <div>
   <p>{% if user.is_authenticated %}Add a New Topic: <a href="{% url 'topic_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
 </div>

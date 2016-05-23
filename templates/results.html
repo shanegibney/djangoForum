@@ -1,0 +1,11 @@
+{% load crudapp_tags %}
+{% block sidebar %}
+{% if active_users %}
+<p>Online Users</p>
+{% for item in active_users %}
+<p>{{ item }}</p>
+{% endfor %}
+{% else %}
+<p>There are no users online</p>
+{% endif %}
+{% endblock %}
