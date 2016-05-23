@@ -1,10 +1,12 @@
 {% load crudapp_tags %}
 {% block sidebar %}
-{% if active_users %}
+{% if users %}
 <p>Online Users</p>
-{% for item in active_users %}
-<p>{{ item }}</p>
-{% endfor %}
+<ul class="user-list">
+    {% for item in users %}
+    <li><a href="{% url 'profile' item.id %}">{{ item }}</a></li>
+    {% endfor %}
+</ul>
 {% else %}
 <p>There are no users online</p>
 {% endif %}

@@ -2,8 +2,8 @@
 <!-- <div class="post"> -->
 <div>
   <h2>Profile for <strong>{{ name }}</strong></h2>
-  <p>Last logged in {{name.last_login|timesince:current_time}}</p>
-  <p>Joined {{name.date_joined|timesince:current_time}}</p>
+  <p>Last logged in {{name.last_login|timesince:current_time}} ago</p>
+  <p>Joined {{name.date_joined|timesince:current_time}} ago</p>
   <p>{{ pnumber.count}} posts, {{ tnumber.count }} topics</p>
   {% if pModel %}
   <div class="table-responsive">
