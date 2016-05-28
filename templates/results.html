@@ -4,7 +4,7 @@
 <p>Online Users</p>
 <ul class="user-list">
     {% for item in users %}
-    <li><a href="{% url 'profile' item.id %}">{{ item }}</a></li>
+    <li class="test"><a href="{% url 'profile' item.id %}">{{ item }}</a></li>
     {% endfor %}
 </ul>
 {% else %}

@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from django import forms
 from django.utils import timezone
 from tinymce.models import HTMLField
-#
+from django.db import models
+
+
 # class Members(models.Model):
 #     first_name = models.CharField(max_length=200)
 #     last_name = models.CharField(max_length=200)
@@ -14,6 +16,16 @@ from tinymce.models import HTMLField
 #     author = models.CharField(max_length=30)
 #     def __str__(self):
 #         return ' '. join([ self.first_name, self.last_name, ])
+
+class AnnonymousForm(forms.Form):
+    name = forms.CharField(max_length=255)
+    email = forms.EmailField()
+    subject = forms.CharField(max_length=255)
+    message = forms.CharField(max_length=800)
+
+class EmailForm(forms.Form):
+    subject = forms.CharField(max_length=255)
+    message = forms.CharField(max_length=800)
 
 class TopicModel(models.Model):
     topic = models.CharField(max_length = 100)

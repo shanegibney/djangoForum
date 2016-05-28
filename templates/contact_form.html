@@ -1,0 +1,23 @@
+{% extends 'index.html' %} {% block homepage %}
+<div class="slideExpandUp well">
+  <form method="post">
+    {% csrf_token %}
+    {% if user.is_authenticated %}
+    <table>
+      {% for item in emailform %}
+      <tr><td class="table-cell-right">{{ item.label }}: </td><td class="table-cell-left">{{ item }}</td></tr>
+      <tr><td></td></tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <table>
+      {% for item in annonymousform %}
+      <tr><td class="table-cell-right">{{ item.label }}: </td><td class="table-cell-left">{{ item }}</td></tr>
+      <tr><td></td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+    <button type="submit" class="save btn btn-default">Email</button>
+  </form>
+</div>
+{% endblock %}

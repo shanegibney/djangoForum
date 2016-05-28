@@ -5,10 +5,10 @@ from django.utils import timezone
 from django import template
 register = template.Library()
 
-@register.inclusion_tag("results.html")
-def results(poll):
-    active_users = User.objects.all().filter(is_active = True)
-    return {'active_users': active_users}
+# @register.inclusion_tag("results.html")
+# def results(poll):
+#     active_users = User.objects.all().filter(is_active = True)
+#     return {'active_users': active_users}
 
 
 def get_all_logged_in_users():

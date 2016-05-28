@@ -1,7 +1,10 @@
 from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
+# from django.views.generic.base import TemplateView
+# from django.core.mail import send_mail, BadHeaderError
+# from models import EmailForm
 
 def loggedin(request):
     # return render_to_response('registration/loggedin.html')
@@ -9,7 +12,8 @@ def loggedin(request):
 
 # def loggedin(request):
 #     return render_to_response('registration/loggedin.html',
-#                               {'username': request.user.username})
+#                               {'username': request.user.usernam
+
 
 def register(request):
     if request.method == 'POST':

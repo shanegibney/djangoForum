@@ -1,51 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import TopicModel, PostModel
+from .models import TopicModel, PostModel, EmailForm, AnnonymousForm
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum
 from django import forms
 from .forms import TopicForm, PostForm
 from django.utils import timezone
 from datetime import date, timedelta
+from django.views.generic.base import TemplateView
+from django.http import HttpResponseRedirect
+from django.core.mail import send_mail, BadHeaderError
+from models import EmailForm
 
 # Create your views here.
 def init(request):
-    # tModel = reversed(TopicModel.objects.all())
-    # pModel = reversed(PostModel.objects.all())
-    # pModel = reversed(PostModel.objects.filter(topicid_id=pk).order_by('-pub_date')[0])
-    # p1 = PostModel.objects.order_by('topicid_id')
-    # p2 = p1.order_by('-pub_date')[0]
-    # pModel = PostModel.objects.order_by('topicid_id').order_by('-pub_date')[0]
-    # context = {'tModel': tModel, 'pModel': pModel}
-    # nums = PostModel.objects.values('topicid').annotate(yoke=Count('post'))
-
-    # get the topicid of the which has the latest date
-    # nums = PostModel.objects.values('topicid').latest('pub_date')
-
-    # gives value of all topicid's
-    # nums = PostModel.objects.values('topicid')
-
-    # topics of the latest 20 posts
-    # nums = PostModel.objects.filter(
-    #     topicid__gt=0
-    #     ).distinct().annotate(a_count=Count(
-    #     'post')
-    #     ).order_by('-pub_date').filter(a_count__gte=1)[:5]
-    # theSQL = nums.query
-    # Reservation.objects.filter(
-    #     restaurant__city_id__gt=0
-    #     ).distinct().annotate(city_count=Count(
-    #     'restaurant_id')
-    #     ).order_by('-reservationdate').filter(city_count__gte=1)[:20]
-
-    # num = PostModel.objects.values('author').annotate(total=Count('post'))#groups by author and counts the posts for each author
-    # num = PostModel.objects.values('topicid').annotate(most_recent=Count('post')).latest('pub_date')
-    # num = PostModel.objects.values('topicid').annotate(recent=Count('post'))####
-    # current =  num[0].recent
-    # num = PostModel.objects.annotate(Count('author'))
-    # current = PostModel.objects.latest('pub_date')
-    # detail = PostModel.objects.values('topicid.topic').aggregate(Max('pub_dat'))
-    # Book.objects.all().aggregate(Max('price'))
-    # Transaction.objects.values('order_id').annotate(total=Sum('value'))
     pModel = PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC LIMIT 0,20')
     totalposts = PostModel.objects.annotate(Count('post'))
     totaltopics = TopicModel.objects.annotate(postfreq = Count('topic'))
@@ -55,7 +22,46 @@ def init(request):
     # num = PostModel.objects.raw('select count(id) from crudapp_postmodel group by topicid_id')
     context = {'pModel': pModel, 'current_time':   timezone.now(), 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
     return render(request, 'forum.html', context)
-    
+
+
+def contact(request):
+    #use id if user logged in to find sendfrom email
+    #otherwise sendfrom email is email from form
+    #if using profile sendfrom is logged in user
+    # and send to is profile email
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            form = EmailForm(request.POST)
+        else:
+            form = AnnonymousForm(request.POST)
+        print 'I am here'
+        if form.is_valid():
+            print 'I am not here'
+            if request.user.is_authenticated():
+                from_email = request.user.email
+                # request.user is an object which needs to be converted to a string for use in send_mail()
+                name = str(request.user)
+            else:
+                from_email = form.cleaned_data['email']
+                name = form.cleaned_data['name']
+            # for contact form, email is always sent to admin
+            logged_in_users = User.objects.all().filter(is_superuser = True)
+            to_email = logged_in_users[0].email
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            full_message = '\n Email from: ' + from_email + '\n \n Email to: ' + to_email + '\n \n Name: ' + name + '\n \n ' + message
+            try:
+              send_mail(subject, full_message, from_email, [to_email])
+              return render(request, 'contact_form.html',{'emailform': emailform, 'annonymousform': annonymousform})
+            except:
+              return redirect('init')
+        else:
+          return redirect('init')
+    else:
+        emailform = EmailForm()
+        annonymousform = AnnonymousForm()
+    return render(request, 'contact_form.html',{'emailform': emailform, 'annonymousform': annonymousform})
+
 
 # profile for each User
 def profile(request, id):
@@ -265,3 +271,43 @@ def delete(request, id):
 #     for k, v in values:
 #         html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
 #     return HttpResponse('<table>%s</table>' % '\n'.join(html))
+
+
+# EXAMPLE QUERIES
+# tModel = reversed(TopicModel.objects.all())
+# pModel = reversed(PostModel.objects.all())
+# pModel = reversed(PostModel.objects.filter(topicid_id=pk).order_by('-pub_date')[0])
+# p1 = PostModel.objects.order_by('topicid_id')
+# p2 = p1.order_by('-pub_date')[0]
+# pModel = PostModel.objects.order_by('topicid_id').order_by('-pub_date')[0]
+# context = {'tModel': tModel, 'pModel': pModel}
+# nums = PostModel.objects.values('topicid').annotate(yoke=Count('post'))
+
+# get the topicid of the which has the latest date
+# nums = PostModel.objects.values('topicid').latest('pub_date')
+
+# gives value of all topicid's
+# nums = PostModel.objects.values('topicid')
+
+# topics of the latest 20 posts
+# nums = PostModel.objects.filter(
+#     topicid__gt=0
+#     ).distinct().annotate(a_count=Count(
+#     'post')
+#     ).order_by('-pub_date').filter(a_count__gte=1)[:5]
+# theSQL = nums.query
+# Reservation.objects.filter(
+#     restaurant__city_id__gt=0
+#     ).distinct().annotate(city_count=Count(
+#     'restaurant_id')
+#     ).order_by('-reservationdate').filter(city_count__gte=1)[:20]
+
+# num = PostModel.objects.values('author').annotate(total=Count('post'))#groups by author and counts the posts for each author
+# num = PostModel.objects.values('topicid').annotate(most_recent=Count('post')).latest('pub_date')
+# num = PostModel.objects.values('topicid').annotate(recent=Count('post'))####
+# current =  num[0].recent
+# num = PostModel.objects.annotate(Count('author'))
+# current = PostModel.objects.latest('pub_date')
+# detail = PostModel.objects.values('topicid.topic').aggregate(Max('pub_dat'))
+# Book.objects.all().aggregate(Max('price'))
+# Transaction.objects.values('order_id').annotate(total=Sum('value'))
