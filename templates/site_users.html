@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% block homepage %}
+<div class="fadeIn">
+<h2>Site Users</h2>
+    {% if site_users %}
+    <ul>
+        {% for item in site_users %}
+        <li><a href="{% url 'profile' item.id %}">{{ item.username }}</a></li>
+        {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

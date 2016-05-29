@@ -30,6 +30,7 @@
         {% if user.is_authenticated and user.username == 'admin' %}
         <li><a href="/admin">Admin</a></li>{% endif %}
         <li><a href="{% url 'todo' %}">To Do</a></li>
+        <li><a href="{% url 'site_users' %}">Site Users</a></li>
         <li><a href="#">File Sharing</a></li>
         <li><a href="#">About</a></li>
       </ul>
@@ -43,25 +44,31 @@
     </div>
   </nav>
   <div class="content container">
-  <div class="row">
-    <!-- <div class="col-md-12"> -->
-    <!-- <div class="span2"> -->
-    <div class="col-md-12">
-      <p>{% if user.is_authenticated %} You are logged in as: <strong><a href="{% url 'profile' user.id %}">{{ user.username}}</a></strong> {% endif %}</p>
+    <div class="row">
+      <!-- <div class="col-md-12"> -->
+      <!-- <div class="span2"> -->
+      <div class="col-md-12">
+        <p>{% if user.is_authenticated %} You are logged in as: <strong><a href="{% url 'profile' user.id %}">{{ user.username}}</a></strong> {% endif %}</p>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <!-- <div class="span4"> -->
-    <div class="col-md-2">
-      {% block sidebar %} {% render_logged_in_user_list %}{% endblock %}
+    <div class="row">
+      <!-- <div class="span4"> -->
+      <div class="col-md-2">
+        {% block sidebar %} {% render_logged_in_user_list %}{% endblock %}
 
+      </div>
+      <!-- <div class="span8"> -->
+      <div class="col-md-10">
+        {% block homepage %} {% endblock %} {% block authentication %} {% endblock %}
+      </div>
     </div>
-    <!-- <div class="span8"> -->
-    <div class="col-md-10">
-      {% block homepage %} {% endblock %} {% block authentication %} {% endblock %}
-    </div>
+    <div></br></div>
+  <div class="jumbotron well">
+    <h2>Disclaimer:</h2>
+    <p>This site is not an official <a href="http://www.qqi.ie">QQI</a> site. The offical<a href="http://www.qqi.ie"> QQI</a> site it can be found at <a href="http://www.qqi.ie">www.qqi.ie</a>. All resources are used at your own risk.</p>
+    <p><a class="btn btn-primary btn-lg" href="http://www.qqi.ie" role="button">QQI</a></p>
   </div>
-  </div>
+</div>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0­-alpha1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter­-bootstrap/4.0.0-­alpha/js/bootstrap.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

@@ -1,33 +1,17 @@
 {% extends 'index.html' %} {% block homepage %}
 <div class="col-md-4 well fadeIn">
+  <h3>Email {{ send_to }}</h3>
   <form method="post">
-    {% csrf_token %}
-    {% if user.is_authenticated %}
-    <h3>Email Contact Form:</h3>
+    {% csrf_token %} {% if user.is_authenticated %}
     <table>
       {% for item in emailform %}
       <tr>
         <td class="table-cell-right">{{ item.label }}: </td>
         <td class="table-cell-left">{{ item }}</td>
       </tr>
-      <tr>
-        <td></td>
-      </tr>
       {% endfor %}
     </table>
-    {% else %}
-    <h3>Email Admin:</h3>
-    <table>
-      {% for item in annonymousform %}
-      <tr>
-        <td class="table-cell-right">{{ item.label }}: </td>
-        <td class="table-cell-left">{{ item }}</td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-      {% endfor %}
-    </table>
+    <br>
     {% endif %}
     <button type="submit" class="save btn btn-default">Email</button>
   </form>

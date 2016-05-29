@@ -23,6 +23,31 @@ def init(request):
     context = {'pModel': pModel, 'current_time':   timezone.now(), 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
     return render(request, 'forum.html', context)
 
+def profile_contact(request, id):
+    user = User.objects.all().filter(pk = id)
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            if request.user.is_authenticated():
+                from_email = request.user.email
+                # request.user is an object which needs to be converted to a string for use in send_mail()
+                name = str(request.user)
+            to_email = user[0].email
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            full_message = '\n Email from: ' + from_email + '\n \n Email to: ' + to_email + '\n \n Name: ' + name + '\n \n ' + message
+            try:
+              send_mail(subject, full_message, from_email, [to_email])
+              return render(request, 'profile_contact_form.html',{'emailform': emailform})
+            except:
+              return redirect('init')
+        else:
+          return redirect('init')
+    else:
+        emailform = EmailForm()
+        send_to = str(user[0].username)
+    return render(request, 'profile_contact_form.html',{'emailform': emailform, 'send_to': send_to})
+
 
 def contact(request):
     #use id if user logged in to find sendfrom email
@@ -73,6 +98,11 @@ def profile(request, id):
     tnumber = PostModel.objects.filter(author = profileof).values('topic_id').distinct().annotate(topicfreq = Count('topic_id'))
     # count = Project.objects.values('informationunit__username').distinct().count()
     return render(request, 'profile.html', {'pModel': pModel, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber})
+
+
+def site_users(request):
+    site_users = User.objects.all()
+    return render(request, 'site_users.html', {'site_users': site_users})
 
 #display thread of posts and form for next post
 def thread(request, id):

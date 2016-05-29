@@ -1,5 +1,5 @@
 {% extends 'index.html' %} {% block homepage %}
-<div class="post">
+<div class="post fadeIn">
   <ol>
     <li>Make post and topics forms required</li>
     <li>Can only edit posts for 24 hrs</li>
@@ -7,21 +7,22 @@
       <li>Need a program that runs every 24hrs and cleans up deletes posts and empty topics</li>
     </ul>
     <li>Include Google social authentication and maybe Twitter</li>
-    <li>Profile page for each user:</li>
+    <li><strike>Profile page for each user:</strike></li>
     <ul>
-      <li>Ability to contact each other via email</li>
-      <li>Profile to display: name, date registered, date last logged out, all posts with paginations</li>
+      <li><strike>Ability to contact each other via email</strike></li>
+      <li><strike>Profile to display: name, date registered, date last logged out, all posts with paginations</strike></li>
     </ul>
     <li>Style contact forms</li>
     <li>Add Bio form/edit/delete to profiles for users to describe themselves</li>
-    <li>Contact form for users to contact admin, this is for users who are having trouble logging in</li>
+    <li>Contact form for users to contact admin, this is for users who are having trouble logging in</strike>
+    </li>
     <li>Online User not disappearing from list when user not properly logged out. Need a purge function.</li>
     <ul>
       <li><a href="http://stackoverflow.com/questions/2723052/how-to-get-the-list-of-the-authenticated-users">See stackoverflow for this issue</a></li>
     </ul>
-    <li>Responsive to different screens, and different numbers of columns for forum table</li>
-    <li>Layout thread posts differently with details on bottom of each and poster top left anf post rest like on Discourse forum</li>
-    <li>Add list users list</li>
+    <li><strike>Responsive to different screens, and different numbers of columns for forum table</strike></li>
+    <li>Layout thread posts differently with details on bottom of each and poster top left and post rest like on Discourse forum</li>
+    <li><strike>Add list users list</strike></li>
     <li>Pagination button for:</li>
     <ul>
       <li>Forum</li>
@@ -35,23 +36,22 @@
     <li>Fix: after logout going immediately to registration brings up logged in messgae of previous user</li>
     <li>Add CSS transitions to elements,</li>
     <ul>
-      <li>Form on bottom of thread appears when you scroll down page</li>
-      <li>Rows of forum table move in laterally to build table</li>
-      <li>Maybe other buttons appear with an animation</li>
+      <li>Rethink css transition for more flow and to be appropriate, currently too much bouncing</li>i>
     </ul>
     <li><strike>List of users online, clickable to their user page</strike></li>
-    <li>Bootstrap sidebar on left for info above, goes under when screen small</li>
+    <li><strike>Bootstrap sidebar on left for info above, goes under when screen small</strike></li>
     <li><strike>inclusion_tag for sidebar</strike></li>
-    <li>emailable forms to contact admin when not logged in</li>
-    <li>email forms for users to email each other from their profiles</li>
+    <li><strike>emailable forms to contact admin when not logged in</strike></li>
+    <li><strike>email forms for users to email each other from their profiles</strike></li>
     <li>in forum.html table column for number of users who contributed to a topic</li>
     <li>Upload profile pic for users</li>
     <li>default randomly generated image for those who don't add a pic to profile</li>
-    <li>Add css class wells</li>
-    <li>Disclaimer for bottom of site on every page</li>
+    <li><strike>Add css class wells</strike></li>
+    <li><strike>Disclaimer for bottom of site on every page</strike></li>
     <li>Vote up and down for each post... this should cover the criteria for 'polling'</li>
     <li>Graphic display of post or topics against time... think about how to display this data.</li>
     <li>About -> who created this site and why.... tutors needlessly repeating notes, place for tutors to discuss etc...</li>
+<li>After sending email to a profile user, need a view to show who the email was sent to and allow users send again if not correct</li>
   </ol>
 </div>
 {% endblock %}

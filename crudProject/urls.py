@@ -11,12 +11,12 @@ urlpatterns = [
     url(r'^thread/(?P<id>\d+)/$', home.thread, name='thread'),
     url(r'^topic_form/$', home.topic_form, name='topic_form'),
     url(r'^todo/$', home.todo, name='todo'),
+    url(r'^site_users/$', home.site_users, name='site_users'),
     url(r'^profile/(?P<id>\d+)/$', home.profile, name='profile'),
+    url(r'^profile_contact/(?P<id>\d+)/$', home.profile_contact, name='profile_contact'),
     url(r'^contact/$', home.contact, name='contact'),
     url(r'^tinymce/', include('tinymce.urls')),
-    # url(r'^delete/(?P<id>\d+)/$', home.delete_new, name='delete_new'),
 
-    # example from wearesocial
     # url(r'^post/delete/(?P<thread_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^accounts/', include('allauth.urls')),
