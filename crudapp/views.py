@@ -1,15 +1,44 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import TopicModel, PostModel, EmailForm, AnnonymousForm
+from .models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum
 from django import forms
-from .forms import TopicForm, PostForm
+from .forms import TopicForm, PostForm, BlogForm
 from django.utils import timezone
 from datetime import date, timedelta
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
-from models import EmailForm
+# from models import EmailForm
+
+
+def blog_form(request):
+    if request.method == "POST":
+        Bform = BlogForm(request.POST)
+        if Bform.is_valid():
+            bform = Bform.save(commit=False)
+            bform.author = request.user
+            bform.pub_date = timezone.now()
+            bform.submitted_date = timezone.now()
+            bform.approved = False
+            bform.save()
+            # email admin
+            admin_email = User.objects.all().filter(is_superuser = True)
+            subject = 'Article submitted to QQIresources, awaiting approval'
+            to_email = admin_email[0].email
+            from_email = request.user.email
+            message = 'An article has been submitted to QQIresources by ' + str(request.user) + ' and is awaiting admin approval. \n \n Title: ' + str(bform.title) + '\n Author: ' + str(bform.author) + '\n Article: ' + str(bform.article)
+            send_mail(subject, message, from_email, [to_email])
+            return redirect('init')
+    else:
+        blogform = BlogForm()
+    return render(request, 'blog_form.html', {'blogform': blogform})
+
+
+def blog(request):
+    blogModel = reversed(BlogModel.objects.all())
+    context = {'blogModel': blogModel}
+    return render(request, 'blog.html', context)
 
 # Create your views here.
 def init(request):

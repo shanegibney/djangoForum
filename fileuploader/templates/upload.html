@@ -1,0 +1,16 @@
+{% extends 'index.html' %} {% block homepage %}
+<h2>File Sharing</h2>
+<p>{% if user.is_authenticated %}Submit an File: <a href="{% url 'file_sharing_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
+<div class="fadeIn">
+  {% if filemodel %}
+  <div class="col-md-8 well">
+    {% for item in filemodel %} {% if item.approved %}
+    <h3>{{ item.title }}</h3>
+    <p>Description {{ item.description}}</p>
+    <h5>Uploaded by {{ item.author }}, published {{ item.pub_date}}</h5>
+    <p>File {{ item.upload }}</p>
+    {% endif %} {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

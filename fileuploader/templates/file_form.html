@@ -1,9 +1,9 @@
 {% extends 'index.html' %} {% block homepage %}
-<h3>Email Contact Form</h3>
-  <div class="col-md-4 well fadeIn">
-<form method="POST">
+<div class="col-md-8 well fadeIn">
+<p>Your submission will be sent to admin for approval.</p>
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ fileform }}
     <div class="form-actions">
       <button type="submit" class="save btn btn-default">Send</button>
     </div>

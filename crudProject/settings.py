@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'tinymce',
     'crudapp',
+    'fileuploader',
 ]
 
 SITE_ID = 1
@@ -72,6 +73,8 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'crudProject.urls'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'fileuploader/uploaded_files')
 
 TEMPLATES = [
     {

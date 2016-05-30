@@ -18,7 +18,6 @@ from django.db import models
 #         return ' '. join([ self.first_name, self.last_name, ])
 
 
-
 class BlogModel(models.Model):
     title = models.CharField(max_length=100)
     article = models.CharField(max_length=255)

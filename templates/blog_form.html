@@ -1,12 +1,11 @@
 {% extends 'index.html' %} {% block homepage %}
-<h3>Email Contact Form</h3>
-  <div class="col-md-4 well fadeIn">
 <form method="POST">
+  <p>Please use the <a href="{% url 'init' %}">Forum</a> for discussions</p>
+  <p>Your article will be sent to admin for approval.</p>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ blogform }}
     <div class="form-actions">
       <button type="submit" class="save btn btn-default">Send</button>
     </div>
 </form>
-</div>
 {% endblock %}

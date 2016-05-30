@@ -1,0 +1,15 @@
+{% extends 'index.html' %} {% block homepage %}
+<h2>Articles</h2>
+<p>{% if user.is_authenticated %}Submit an Article: <a href="{% url 'blog_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
+<div class="fadeIn">
+  {% if blogModel %}
+  <div class="col-md-8 well">
+    {% for item in blogModel %} {% if item.approved %}
+    <h3>{{ item.title }}</h3>
+    <h5>Author {{ item.author }}, published {{ item.pub_date}}</h5>
+    <p>{{ item.article}}</p>
+    {% endif %} {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
