@@ -9,6 +9,8 @@
     <p>Description {{ item.description}}</p>
     <h5>Uploaded by {{ item.author }}, published {{ item.pub_date}}</h5>
     <p>File {{ item.upload }}</p>
+    <p>URL <a href="media{{ item.upload.name}}">media{{ item.upload}}</a></p>
+    <p>Name: {{ item.upload.name }}</p>
     {% endif %} {% endfor %}
   </div>
   {% endif %}

@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, render_to_response, get_object_or_404, redirect
+from django.template import RequestContext
 from django.db import models
 from .models import FileModel
 from django.contrib.auth.models import User
@@ -39,6 +39,7 @@ def file_sharing_form(request):
         if file.is_valid():
             print 'is valid in here'
             fform = file.save(commit=False)
+            # fform = FileModel(docfile = request.FILES['docfile'])
             fform.author = request.user
             fform.pub_date = timezone.now()
             fform.submitted_date = timezone.now()
@@ -55,4 +56,5 @@ def file_sharing_form(request):
         else:
             print 'Not valid'
     fileform = FileForm()
-    return render(request, 'file_form.html', {'fileform': fileform})
+    context = {'fileform': fileform}
+    return render_to_response('file_form.html', context_instance=RequestContext(request, context))

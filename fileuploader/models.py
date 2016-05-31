@@ -14,5 +14,6 @@ class FileModel(models.Model):
     author = models.CharField(max_length=255)
     approved = models.BooleanField(default=False)
     upload = models.FileField()
+    # upload = models.FileField(upload_to='documents/%Y/%m/%d')
     def __str__(self):
             return self.title

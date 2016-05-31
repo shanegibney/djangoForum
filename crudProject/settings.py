@@ -75,6 +75,7 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = 'crudProject.urls'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'fileuploader/uploaded_files')
+MEDIA_URL = 'fileuploader/uploaded_files/'
 
 TEMPLATES = [
     {
@@ -85,6 +86,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.core.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
