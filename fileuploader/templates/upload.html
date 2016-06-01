@@ -8,9 +8,10 @@
     <h3>{{ item.title }}</h3>
     <p>Description {{ item.description}}</p>
     <h5>Uploaded by {{ item.author }}, published {{ item.pub_date}}</h5>
-    <p>File {{ item.upload }}</p>
-    <p>URL <a href="media{{ item.upload.name}}">media{{ item.upload}}</a></p>
-    <p>Name: {{ item.upload.name }}</p>
+    <p>File name {{ item.upload }}</p>
+    <p>URL <a href="/{{ MEDIA_URL }}{{ item.upload.name}}">media{{ item.upload}}</a></p>
+    <!-- <p><a href="localhost:8000/media/TESTFILE.txt"></a></p> -->
+    <p>Name of file {{ item.upload.name }}</p>
     {% endif %} {% endfor %}
   </div>
   {% endif %}

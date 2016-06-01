@@ -49,7 +49,8 @@ def init(request):
     totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
     # pModel = PostModel.objects.raw('select *, max(pub_date) from crudapp_postmodel WHERE topic_id = )
     # num = PostModel.objects.raw('select count(id) from crudapp_postmodel group by topicid_id')
-    context = {'pModel': pModel, 'current_time':   timezone.now(), 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
+    test = True
+    context = {'test': test, 'pModel': pModel, 'current_time':   timezone.now(), 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
     return render(request, 'forum.html', context)
 
 def profile_contact(request, id):

@@ -1,7 +1,6 @@
 {% extends 'index.html' %} {% block homepage %}
 <div class="post">
   <ol>
-    <li><strike>Blog model needs a title field added</strike></li>
     <li>Make post and topics forms required</li>
     <li>Can only edit posts for 24 hrs</li>
     <li>Site needs a search function. Search in topic name, posts, articles and user list.</li>
@@ -9,27 +8,17 @@
       <li>Need a program that runs every 24hrs and cleans up deletes posts and empty topics</li>
     </ul>
     <li>Include Google social authentication and maybe Twitter</li>
-    <li><strike>Profile page for each user:</strike></li>
-    <ul>
-      <li><strike>Ability to contact each other via email</strike></li>
-      <li><strike>Profile to display: name, date registered, date last logged out, all posts with paginations</strike></li>
-    </ul>
-    <li>Redo 'Articles' as a new app, call it blog as this is a requirement</li>
     <li>Deploy on Bluehost</li>
     <li>Vote up or down individual posts in threads.</li>
     <li>Report abuse button on each post</li>
     <li>Add a checkbot question to all contact forms and article submission forms</li>
     <li>Style contact forms</li>
     <li>Add Bio form/edit/delete to profiles for users to describe themselves</li>
-    <li>Contact form for users to contact admin, this is for users who are having trouble logging in</strike>
-    </li>
-    <li>Online User not disappearing from list when user not properly logged out. Need a purge function.</li>
+    <li>Online User not disappearing from list when logged out. This because session doesn't expire for two weeks.</li>
     <ul>
       <li><a href="http://stackoverflow.com/questions/2723052/how-to-get-the-list-of-the-authenticated-users">See stackoverflow for this issue</a></li>
     </ul>
-    <li><strike>Responsive to different screens, and different numbers of columns for forum table</strike></li>
-    <li>Layout thread posts differently with details on bottom of each and poster top left and post rest like on Discourse forum</li>
-    <li><strike>Add list users list</strike></li>
+    <li>Change layout of post to look less like a table</li>
     <li>Pagination button for:</li>
     <ul>
       <li>Forum</li>
@@ -38,30 +27,15 @@
       <li>list users list</li>
       <li>Thread of posts</li>
     </ul>
-    <li>App for sharing files</li>
     <li>Get tinyMCE to work with forms</li>
     <li>Fix: after logout going immediately to registration brings up logged in messgae of previous user</li>
     <li>Add CSS transitions to elements,</li>
     <ul>
       <li>Rethink css transition for more flow and to be appropriate, currently too much bouncing</li>i>
     </ul>
-    <li><strike>List of users online, clickable to their user page</strike></li>
-    <li><strike>Bootstrap sidebar on left for info above, goes under when screen small</strike></li>
-    <li><strike>inclusion_tag for sidebar</strike></li>
-    <li><strike>emailable forms to contact admin when not logged in</strike></li>
-    <li><strike>email forms for users to email each other from their profiles</strike></li>
     <li>in forum.html table column for number of users who contributed to a topic</li>
-    <li>Upload profile pic for users</li>
-    <li>default randomly generated image for those who don't add a pic to profile</li>
-    <li><strike>Add css class wells</strike></li>
-    <li><strike>Disclaimer for bottom of site on every page</strike></li>
-    <li>Vote up and down for each post... this should cover the criteria for 'polling'</li>
-    <li>Graphic display of post or topics against time... think about how to display this data.</li>
     <li>About -> who created this site and why.... tutors needlessly repeating notes, place for tutors to discuss etc...</li>
     <li>After sending email to a profile user, need a view to show who the email was sent to and allow users send again if not correct</li>
-    <li>Different forums as in last site.</li>
-    <li>Blog section for articles and users can submit article for approval</li>
-    <li>Deploy on Bluehost</li>
     <li>separate file for passwords use gitignore</li>
   </ol>
 </div>

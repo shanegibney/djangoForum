@@ -5,6 +5,7 @@ from fileuploader import views as fileshare
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import patterns
+from django.contrib.staticfiles import views
 
 
 urlpatterns = [
@@ -23,18 +24,17 @@ urlpatterns = [
     url(r'^blog_form/$', home.blog_form, name='blog_form'),
     url(r'^site_users/$', home.site_users, name='site_users'),
     url(r'^profile/(?P<id>\d+)/$', home.profile, name='profile'),
-    url(r'^media/(?P<path>\d+)/$', 'django.views.static.serve', name='media'),
+    # url(r'^media/(?P<path>\d+)/$', 'django.views.static.serve', name='media'),
     url(r'^profile_contact/(?P<id>\d+)/$', home.profile_contact, name='profile_contact'),
     url(r'^contact/$', home.contact, name='contact'),
     url(r'^tinymce/', include('tinymce.urls')),
-
     # url(r'^post/delete/(?P<thread_id>\d+)/(?P<post_id>\d+)/$', forum_views.delete_post, name='delete_post'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^accounts/', include('allauth.urls')),
-    ]
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    urlpatterns += patterns('', url(r'^media/(?P<path>)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),)
 
-# if settings.DEBUG is True:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += [
+#         url(r'^media/(?P<path>.*)$', views.serve),
+#     ]
