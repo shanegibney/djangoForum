@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^file_sharing/$', fileshare.file_sharing, name='file_sharing'),
     url(r'^file_sharing_form/$', fileshare.file_sharing_form, name='file_sharing_form'),
     url(r'^blog_form/$', home.blog_form, name='blog_form'),
+    # url(r'^site_users/$', home.site_users, name='site_users'),
     url(r'^site_users/$', home.site_users, name='site_users'),
     url(r'^profile/(?P<id>\d+)/$', home.profile, name='profile'),
     # url(r'^media/(?P<path>\d+)/$', 'django.views.static.serve', name='media'),
@@ -32,9 +33,3 @@ urlpatterns = [
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^accounts/', include('allauth.urls')),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-# if settings.DEBUG:
-#     urlpatterns += [
-#         url(r'^media/(?P<path>.*)$', views.serve),
-#     ]

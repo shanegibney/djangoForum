@@ -1,13 +1,24 @@
 {% extends 'index.html' %}
 {% block homepage %}
 <h2>Site Users</h2>
-<div class="fadeIn">
-    {% if site_users %}
+<div>
+    {% if users_model %}
     <ul>
-        {% for item in site_users %}
+        {% for item in users_model %}
         <li><a href="{% url 'profile' item.id %}">{{ item.username }}</a></li>
         {% endfor %}
     </ul>
+    <span class="step-links pagination">
+        {% if users_model.has_previous %}
+            <a href="?page={{ users_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+        {% endif %}
+        <span class="current">
+            Page {{ users_model.number }} of {{ users_model.paginator.num_pages }}
+        </span>
+        {% if users_model.has_next %}
+            <a href="?page={{ users_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
+        {% endif %}
+    </span>
   {% endif %}
 </div>
 {% endblock %}

@@ -3,34 +3,30 @@ from django.template import RequestContext
 from django.db import models
 from .models import FileModel
 from django.contrib.auth.models import User
-# from django.contrib.auth.models import User
-# from django.db.models import Count, Max, Sum
 from django import forms
 from .forms import FileForm
 from django.utils import timezone
-# from datetime import date, timedelta
-# from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail, BadHeaderError
-# from django.core.mail import send_mail, BadHeaderError
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def file_sharing(request):
-    filemodel = reversed(FileModel.objects.all())
-    context = {'filemodel': filemodel}
+    filemodel = FileModel.objects.all().reverse()
+    paginator = Paginator(filemodel, 2)
+    page = request.GET.get('page')
+    try:
+        file_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        file_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        file_model = paginator.page(paginator.num_pages)
+
+    context = {'file_model': file_model}
     return render(request, 'upload.html', context)
 
-
-# def upload_file(request):
-#     if request.method == 'POST':
-#         form = ModelFormWithFileField(request.POST, request.FILES)
-#         if form.is_valid():
-#             # file is saved
-#             form.save()
-#             return HttpResponseRedirect('/success/url/')
-#     else:
-#         form = ModelFormWithFileField()
-#     return render(request, 'upload.html', {'form': form})
 
 def file_sharing_form(request):
     if request.method == "POST":
@@ -39,7 +35,6 @@ def file_sharing_form(request):
         if file.is_valid():
             print 'is valid in here'
             fform = file.save(commit=False)
-            # fform = FileModel(docfile = request.FILES['docfile'])
             fform.author = request.user
             fform.pub_date = timezone.now()
             fform.submitted_date = timezone.now()

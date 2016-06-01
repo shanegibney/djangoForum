@@ -7,8 +7,8 @@
 <div>
   <p>{{ totalposts.count }} posts, {{ totaltopics.count }} topics, {{ totalusers.count }} users, {{ totalviews.numviews}} views</p>
 </div>
-<div class="post slideUp">
-  {% if pModel %}
+<div class="post">
+  {% if forum_model %}
   <div class="table-responsive">
     <table class='table table-striped table-hover'>
       <thead>
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for item in pModel %}
+        {% for item in forum_model %}
         <tr>
           <td><a href="{% url 'thread' item.topic_id %}">{{ item.topic.topic }}</a></td>
           <td><a href="{% url 'profile' item.topic.author_id %}">{{ item.topic.topicAuthor }}</a></td>
@@ -32,6 +32,17 @@
         {% endfor %}
       </tbody>
     </table>
+    <span class="step-links pagination">
+        {% if forum_model.has_previous %}
+            <a href="?page={{ forum_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+        {% endif %}
+        <span class="current">
+            Page {{ forum_model.number }} of {{ forum_model.paginator.num_pages }}
+        </span>
+        {% if forum_model.has_next %}
+            <a href="?page={{ forum_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
+        {% endif %}
+    </span>
     {% endif %}
   </div>
 </div>

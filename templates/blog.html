@@ -1,14 +1,27 @@
 {% extends 'index.html' %} {% block homepage %}
 <h2>Articles</h2>
 <p>{% if user.is_authenticated %}Submit an Article: <a href="{% url 'blog_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
-<div class="fadeIn">
-  {% if blogModel %}
+<div>
+  {% if blog_model %}
   <div class="col-md-8 well">
-    {% for item in blogModel %} {% if item.approved %}
-    <h3>{{ item.title }}</h3>
-    <h5>Author {{ item.author }}, published {{ item.pub_date}}</h5>
-    <p>{{ item.article}}</p>
-    {% endif %} {% endfor %}
+    {% for item in blog_model %}
+    {% if item.approved %}
+      <h3>{{ item.title }}</h3>
+      <h5>Author {{ item.author }}, published {{ item.pub_date}}</h5>
+      <p>{{ item.article}}</p>
+    {% endif %}
+    {% endfor %}
+    <span class="step-links pagination">
+        {% if blog_model.has_previous %}
+            <a href="?page={{ blog_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+        {% endif %}
+        <span class="current">
+            Page {{ blog_model.number }} of {{ blog_model.paginator.num_pages }}
+        </span>
+        {% if blog_model.has_next %}
+            <a href="?page={{ blog_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
+        {% endif %}
+    </span>
   </div>
   {% endif %}
 </div>
