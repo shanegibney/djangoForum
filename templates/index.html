@@ -1,6 +1,7 @@
 {% load staticfiles %} {% load crudapp_tags %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
   <link rel="stylesheet" href="{% static 'css/animations.css' %}">
 </head>
+
 <body>
   <nav role="navigation" class="navbar navbar-default">
     <div class="navbar-header">
@@ -53,8 +55,7 @@
       <div class="col-md-10">
         {% block homepage %} {% endblock %} {% block authentication %} {% endblock %}
       </div>
-      {% block content %}
-      {% endblock %}
+      {% block content %} {% endblock %}
     </div>
     <div>
       </br>

@@ -1,3 +1,0 @@
-Setting up a Django email contact form.
-Presuming you have smtp setup for email.
-First create a 

@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def file_sharing(request):
     filemodel = FileModel.objects.all().reverse()
-    paginator = Paginator(filemodel, 2)
+    paginator = Paginator(filemodel, 20)
     page = request.GET.get('page')
     try:
         file_model = paginator.page(page)

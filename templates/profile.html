@@ -6,11 +6,11 @@
   <p>Activity {{ pnumber.count}} posts, {{ tnumber.count }} topics</p>
   {% if user.is_authenticated %}
   <div>
-    <!-- <form action="profile_contact">
-      <p>id {{ name.id }}</p>
-      <input type="submit" class="btn btn-default" value="Contact {{ name }}">
-    </form> -->
     <p><a href="{% url 'profile_contact' name.id %}" class="btn btn-default">Contact {{ name }}</a></p>
+  </div>
+  {% else %}
+  <div>
+    <p><a href="{% url 'account_login' %}">Login</a></li> to contact {{ name }}</p>
   </div>
   {% endif %}
   {% if profile_model %}

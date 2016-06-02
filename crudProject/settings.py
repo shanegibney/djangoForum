@@ -36,7 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'shanegibney@gmail.com'
-EMAIL_HOST_PASSWORD = 'd5F-~ZTViG'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 
 # Application definition
@@ -54,9 +54,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'tinymce',
     'crudapp',
     'fileuploader',
+    'tinymce',
 ]
 
 SITE_ID = 1
@@ -187,6 +187,16 @@ EMAIL_CONFIRMATION_DAYS = 3 #####
 # Enable support for django-avatar. When enabled, the profile image of the user is copied locally into django-avatar at signup.
 # SOCIALACCOUNT_AVATAR_SUPPORT (= 'avatar' in settings.INSTALLED_APPS)
 
+
+TINYMCE_JS_URL = 'http://localhost:8000/tiny_mce/tiny_mce_src.js'
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
+}
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
 
 
 # Static files (CSS, JavaScript, Images)

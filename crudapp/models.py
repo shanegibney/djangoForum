@@ -5,18 +5,7 @@ from django import forms
 from django.utils import timezone
 from tinymce.models import HTMLField
 from django.db import models
-
-
-# class Members(models.Model):
-#     first_name = models.CharField(max_length=200)
-#     last_name = models.CharField(max_length=200)
-#     topic = models.CharField(max_length=100)
-#     post = models.CharField(max_length=100)
-#     pub_date = models.DateTimeField('date published')
-#     author = models.CharField(max_length=30)
-#     def __str__(self):
-#         return ' '. join([ self.first_name, self.last_name, ])
-
+from tinymce.widgets import TinyMCE
 
 
 class BlogModel(models.Model):
@@ -51,6 +40,7 @@ class TopicModel(models.Model):
 
 class PostModel(models.Model):
     post = HTMLField(blank = True, max_length = 1000)
+    # post = models.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
     pub_date = models.DateTimeField('date published')
     author = models.CharField(max_length = 30)
     user =  models.ForeignKey(User)

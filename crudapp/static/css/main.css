@@ -7,8 +7,20 @@
 .table-cell-right {
   text-align: right;
 }
+.table-cell-top {
+  vertical-align: top;
+}
+.important {
+  text-align: center;
+}
+.urgent {
+  transform: rotate(-90deg);
+}
+.todo_list {
+  border: 1px solid grey;
+}
 .test {
-  color: gey;
+  color: grey;
   list-style-type: square;
 }
 .article-title {
