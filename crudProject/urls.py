@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^$', home.init, name='init'),
     url(r'^edit/(?P<id>\d+)/$', home.edit, name='edit'),
     url(r'^delete/(?P<id>\d+)/$', home.delete, name='delete'),
+    url(r'^vote_up/(?P<id>\d+)/$', home.vote_up, name='vote_up'),
+    url(r'^vote_down/(?P<id>\d+)/$', home.vote_down, name='vote_down'),
     # passing two id's in a url
     # url(r'^thread/(?P<id>\d+)/(?P<topic>\d+)/$', home.thread, name='thread'),
     url(r'^thread/(?P<id>\d+)/$', home.thread, name='thread'),
