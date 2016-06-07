@@ -1,7 +1,10 @@
-{% extends 'index.html' %} {% block homepage %}
-<div class="col-md-4 well fadeIn">
+{% extends 'index.html' %}
+{% load bootstrap %}
+{% block homepage %}
+<div class="col-md-4 well">
   <h3>Email {{ send_to }}</h3>
-  <form method="post">
+  <form class="signup" method="post">
+    <div class="form-group">
     {% csrf_token %} {% if user.is_authenticated %}
     <table>
       {% for item in emailform %}
@@ -11,7 +14,7 @@
       </tr>
       {% endfor %}
     </table>
-    <br>
+  </div>
     {% endif %}
     <button type="submit" class="save btn btn-default">Email</button>
   </form>

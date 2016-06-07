@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django import forms
 # from django.utils import timezone
 # from tinymce.models import HTMLField
@@ -12,8 +12,9 @@ class FileModel(models.Model):
     pub_date = models.DateTimeField('date published')
     submitted_date = models.DateTimeField('date submitted')
     author = models.CharField(max_length=255)
+    user =  models.ForeignKey(User, default=6)
     approved = models.BooleanField(default=False)
     upload = models.FileField()
-    # upload = models.FileField(upload_to='documents/%Y/%m/%d')
+    vote = models.IntegerField(default=0)
     def __str__(self):
             return self.title

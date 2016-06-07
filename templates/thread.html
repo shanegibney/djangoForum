@@ -1,58 +1,72 @@
 {% extends 'index.html' %} {% block homepage %}
 <div>
-<div>
-    {% if threadTopic %}
-    {% for item in threadTopic %}
+  <div>
+    {% if threadTopic %} {% for item in threadTopic %}
     <h2><strong>Topic: </strong> {{ item.topic }}</h2>
-    <h4><strong>Topic started by </strong><a href="{% url 'profile' item.author_id %}">{{ item.topicAuthor}}</a></h4>
+    <h4><strong>Topic started by </strong><a title="profile for {{ item.topicAuthor }}" href="{% url 'profile' item.author_id %}">{{ item.topicAuthor}}</a></h4>
     <p>{{ item.views }} views, {{ numtopicposts.count }} posts, {{ numtopicusers.count }} users</p>
-    {% endfor %}
-    {% endif %}
-</div>
-<div class="post">
-  {% if thread_model %}
-  <div class="table-responsive">
-    <table class='table table-striped table-hover'>
-      <thead>
-        <tr>
-          <th></th>
-          <th></th>
-          <th>Post</th>
-          <th>Author</th>
-          <th>Posted</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in thread_model %}
-        <tr>
-          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'delete' item.id %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}</td>
-          <td>{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
-          <td>{{ item.post}}</td>
-          <td><a href="{% url 'profile' item.user_id %}">{{ item.author}}</a></td>
-          <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}} ago</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <span class="step-links pagination">
+    {% endfor %} {% endif %}
+  </div>
+  <div class="post">
+    {% if thread_model %}
+    <div class="table-responsive">
+      <table class='table table-striped table-hover'>
+        <thead>
+          <tr>
+            {% if user.is_authenticated %}
+            <th></th>
+            <th></th>
+            {% endif %}
+            <th>Post</th>
+            <th class="table-cell-center">Author</th>
+            <th>Forum</th>
+            <th>Posted</th>
+            <th>Votes</th>
+            {% if user.is_authenticated %}
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in thread_model %}
+          <tr>
+            {% if user.is_authenticated %}
+            <td title="delete post">{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'delete' item.id %}"><span class="glyphicon glyphicon-trash"></span></a>{% endif %}</td>
+            <td title="edit post">{% if item.post == "This post has been removed by the author" %}{% elif item.author == user.username or user.username == 'admin' %}<a href="{% url 'edit' item.id %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
+            {% endif %}
+            <td>{{ item.post }}</td>
+            <td class="table-cell-center" title="profile for {{ item.author }}"><a href="{% url 'profile' item.user_id %}">{{ item.author}}</a></td>
+            <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}} ago</td>
+            <td id="voted{{ item.id }}" class="table-cell-center">{{ item.vote }}</td>
+            {% if user.is_authenticated %}
+            <td id="{{ item.id }}" class='vote_up table-cell-center' title="vote up this post"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></td>
+            <td id="{{ item.id }}" class='vote_down table-cell-center' title="vote down this post"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></td>
+            <td id="{{ item.id }}" class='report table-cell-center'><span title="report this post" class="glyphicon glyphicon-warning-sign"></td>
+            <td id="reported{{ item.id }}"></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <span class="step-links pagination">
         {% if thread_model.has_previous %}
             <a href="?page={{ thread_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
-        {% endif %}
-        <span class="current">
+              {% endif %}
+              <span class="current">
             Page {{ thread_model.number }} of {{ thread_model.paginator.num_pages }}
-        </span>
-        {% if thread_model.has_next %}
-            <a href="?page={{ thread_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
-        {% endif %}
-    </span>
-    {% endif %}
+        </span> {% if thread_model.has_next %}
+              <a href="?page={{ thread_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a> {% endif %}
+              </span>
+              {% endif %}
+    </div>
   </div>
-</div>
 </div>
 {% if user.is_authenticated %}
 <h3>New Post</h3>
 <form method="POST" class="post-form">{% csrf_token %} {{ postform.as_p }}
   <button type="submit" class="save btn btn-default">Post</button>
 </form>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

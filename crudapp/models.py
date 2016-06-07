@@ -13,8 +13,11 @@ class BlogModel(models.Model):
     article = models.CharField(max_length=255)
     pub_date = models.DateTimeField('date published')
     submitted_date = models.DateTimeField('date submitted')
-    author = models.CharField(max_length=255)
+    # author = models.CharField(max_length=255)
+    # user = models.ForeignKey(User)
+    author = models.ForeignKey(User)
     approved = models.BooleanField(default=False)
+    vote = models.IntegerField(default=0)
     def __str__(self):              # __unicode__ on Python 2
             return 'approved, ' + str(self.approved) + ' article, ' + self.article
 
@@ -32,9 +35,27 @@ class TopicModel(models.Model):
     topic = models.CharField(max_length = 100)
     topicAuthor = models.CharField(max_length = 100)
     author = models.ForeignKey(User)
+    level1 = 'L1'
+    level2 = 'L2'
+    level3 = 'L3'
+    level4 = 'L4'
+    YEAR_IN_SCHOOL_CHOICES = (
+        (level1, 'Level 1'),
+        (level2, 'Level 2'),
+        (level3, 'Level 3'),
+        (level4, 'Level 4'),
+    )
+    forum = models.CharField(
+        max_length=2,
+        choices=YEAR_IN_SCHOOL_CHOICES,
+        default=level4,
+    )
     # topic = HTMLField(blank=True)
-    views = models.PositiveIntegerField(default = 0)
+    #
+    # def is_upperclass(self):
+    #     return self.year_in_school in (self.JUNIOR, self.SENIOR)
 
+    views = models.PositiveIntegerField(default = 0)
     def __str__(self):              # __unicode__ on Python 2
             return self.topic
 
@@ -45,27 +66,7 @@ class PostModel(models.Model):
     author = models.CharField(max_length = 30)
     user =  models.ForeignKey(User)
     topic = models.ForeignKey(TopicModel)
-    # topicid = models.ForeignKey(TopicModel, on_delete=models.CASCADE, null=True)
+    vote = models.IntegerField(default=0)
 
     def __str__(self):              # __unicode__ on Python 2
             return self.post
-
-# test models
-# class Reporter(models.Model):
-#     first_name = models.CharField(max_length=30)
-#     last_name = models.CharField(max_length=30)
-#     email = models.EmailField()
-#
-#     def __str__(self):              # __unicode__ on Python 2
-#         return "%s %s" % (self.first_name, self.last_name)
-#
-# class Article(models.Model):
-#     headline = models.CharField(max_length=100)
-#     pub_date = models.DateField()
-#     reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
-#
-#     def __str__(self):              # __unicode__ on Python 2
-#         return self.headline
-#
-#     class Meta:
-#         ordering = ('headline',)

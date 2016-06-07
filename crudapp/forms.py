@@ -13,10 +13,10 @@ class BlogForm(forms.ModelForm):
 class TopicForm(forms.ModelForm):
     class Meta:
         model = TopicModel
-        fields = ('id', 'topic')
+        fields = ('id', 'forum', 'topic')
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = PostModel
         # post = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
-        fields = ('id', 'post',)
+        fields = ('id', 'post')

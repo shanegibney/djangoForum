@@ -1,9 +1,11 @@
-{% extends 'index.html' %} {% block homepage %}
+{% extends 'index.html' %}
+{% load bootstrap %}
+ {% block homepage %}
 <h3>Email Contact Form</h3>
-  <div class="col-md-4 well fadeIn">
-<form method="POST">
+  <div class="col-md-4 well">
+<form class="signup" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|bootstrap }}
     <div class="form-actions">
       <button type="submit" class="save btn btn-default">Send</button>
     </div>

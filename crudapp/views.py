@@ -7,17 +7,18 @@ from .forms import TopicForm, PostForm, BlogForm
 from django.utils import timezone
 from datetime import date, timedelta
 from django.views.generic.base import TemplateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def blog_form(request):
     if request.method == "POST":
+        userInstance = User.objects.get(username = request.user)
         Bform = BlogForm(request.POST)
         if Bform.is_valid():
             bform = Bform.save(commit=False)
-            bform.author = request.user
+            bform.author = userInstance
             bform.pub_date = timezone.now()
             bform.submitted_date = timezone.now()
             bform.approved = False
@@ -27,12 +28,56 @@ def blog_form(request):
             subject = 'Article submitted to QQIresources, awaiting approval'
             to_email = admin_email[0].email
             from_email = request.user.email
-            message = 'An article has been submitted to QQIresources by ' + str(request.user) + ' and is awaiting admin approval. \n \n Title: ' + str(bform.title) + '\n Author: ' + str(bform.author) + '\n Article: ' + str(bform.article)
+            message = '\n An article has been submitted to QQIresources by ' + str(request.user) + ' and is awaiting admin approval. \n'
+            message += '\n Title: ' + str(bform.title) + '\n'
+            message += '\n Author: ' + str(bform.author) + '\n'
+            message += '\n Article: ' + str(bform.article) + '\n'
+            message += '\n http://localhost:8000/admin' + '\n'
             send_mail(subject, message, from_email, [to_email])
             return redirect('init')
     else:
         blogform = BlogForm()
     return render(request, 'blog_form.html', {'blogform': blogform})
+
+def report(request, id):
+    reports = PostModel.objects.get(pk = id)
+    admin_email = User.objects.all().filter(is_superuser = True)
+    subject = 'A QQIresources post has been reported by ' + str(request.user)
+    to_email = admin_email[0].email
+    from_email = request.user.email
+    message = '\n Post author: ' + reports.author + '\n'
+    message += '\n Thread: ' + str(reports.topic.topic) + '\n'
+    message += '\n Post: ' + str(reports.post) + '\n'
+    message += '\n url: http://localhost:8000/thread/' + str(reports.topic_id) + '\n'
+    message += '\n Reported by ' + str(request.user) + '\n'
+    message += '\n' + str(request.user) + ' can be contacted at ' + str(request.user.email) + '\n'
+    message += '\n Edit or delete this at http://localhost:8000/admin'
+    send_mail(subject, message, from_email, [to_email])
+    return HttpResponse('', content_type="text/plain")
+
+def vote_up(request, id):
+    posts = PostModel.objects.get(pk = id)
+    posts.vote += 1
+    PostModel.objects.filter(pk=id).update(vote=posts.vote)
+    return HttpResponse(posts.vote, content_type="text/plain")
+
+def vote_down(request, id):
+    posts = PostModel.objects.get(pk = id)
+    posts.vote -= 1
+    PostModel.objects.filter(pk=id).update(vote=posts.vote)
+    return HttpResponse(posts.vote, content_type="text/plain")
+
+def vote_up_article(request, id):
+    posts = BlogModel.objects.get(pk = id)
+    posts.vote += 1
+    BlogModel.objects.filter(pk=id).update(vote=posts.vote)
+    return HttpResponse(posts.vote, content_type="text/plain")
+
+def vote_down_article(request, id):
+    posts = BlogModel.objects.get(pk = id)
+    posts.vote -= 1
+    BlogModel.objects.filter(pk=id).update(vote=posts.vote)
+    return HttpResponse(posts.vote, content_type="text/plain")
 
 
 def blog(request):
@@ -107,9 +152,7 @@ def contact(request):
             form = EmailForm(request.POST)
         else:
             form = AnnonymousForm(request.POST)
-        print 'I am here'
         if form.is_valid():
-            print 'I am not here'
             if request.user.is_authenticated():
                 from_email = request.user.email
                 # request.user is an object which needs to be converted to a string for use in send_mail()
@@ -140,7 +183,7 @@ def contact(request):
 def profile(request, id):
     name = User.objects.all().filter(pk = id)
     profileof = name[0]
-    pModel = PostModel.objects.all().filter(author = profileof).reverse()
+    pModel = PostModel.objects.all().filter(author = profileof).order_by('pub_date').reverse()
     paginator = Paginator(pModel, 10)
     page = request.GET.get('page')
     try:
@@ -151,7 +194,6 @@ def profile(request, id):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         profile_model = paginator.page(paginator.num_pages)
-
     pnumber = PostModel.objects.filter(author = profileof).annotate(postfreq = Count('post'))
     tnumber = PostModel.objects.filter(author = profileof).values('topic_id').distinct().annotate(topicfreq = Count('topic_id'))
     return render(request, 'profile.html', {'profile_model': profile_model, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber})
@@ -189,7 +231,7 @@ def thread(request, id):
             pform.save()
             return redirect('thread', id)
     else:
-        pk=id
+        pk=s
         pModel = PostModel.objects.all().filter(topic_id = pk).reverse()
         paginator = Paginator(pModel, 10)
         page = request.GET.get('page')

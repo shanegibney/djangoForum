@@ -7,6 +7,7 @@
 .table-cell-right {
   text-align: right;
 }
+
 .table-cell-top {
   vertical-align: top;
 }
@@ -44,4 +45,16 @@ a.contact_button {
   appearance: button;
   text-decoration: none;
   color: initial;
+}
+
+input[type='text']{
+  color: red;
+  font-size: 24px;
+  display: block;
+  border-radius: 5px;
+}
+
+label{
+  margin-top: 15px;
+
 }

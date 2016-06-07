@@ -1,23 +1,18 @@
-{% extends 'index.html' %} {% block homepage %}
-<div class="col-md-4 well fadeIn">
+{% extends 'index.html' %}
+{% load bootstrap %}
+{% block homepage %}
+<div class="col-md-6 well">
   <form method="post">
     {% csrf_token %}
     {% if user.is_authenticated %}
-    <h3>Email Contact Form:</h3>
-    <table>
-      {% for item in emailform %}
-      <tr>
-        <td class="table-cell-right">{{ item.label }}: </td>
-        <td class="table-cell-left">{{ item }}</td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-      {% endfor %}
-    </table>
+    <label for="id_subject">Subject: </label>
+      {{ emailform.subject }}
+
+      <label for="id_message">Message: </label>
+        {{ emailform.message }}
     {% else %}
     <h3>Email Admin:</h3>
-    <table>
+    <table class="contact">
       {% for item in annonymousform %}
       <tr>
         <td class="table-cell-right">{{ item.label }}: </td>

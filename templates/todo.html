@@ -11,11 +11,16 @@
       <td class="table-cell-top todo_list">
         <ol>
           <li>Make post and topics forms required</li>
+          <li>Facebook allauth sign-in not working.</li>
           <li>Site needs a search function. Search in topic name, posts, articles and user list.</li>
           <li>Online User not disappearing from list when logged out. This because session doesn't expire for two weeks. <a href="http://stackoverflow.com/questions/2723052/how-to-get-the-list-of-the-authenticated-users">See stackoverflow for this issue</a></li>
-          <li>Fix: after logout going immediately to registration brings up logged in messgae of previous user</li>
+          <li>Fix: after logout going immediately to registration brings up logged in message of previous user</li>
           <li>separate file for passwords use gitignore</li>
           <li>Counter for downloads of each file</li>
+          <li>In profile need to list articles contributed and files uploaded by user. Let these be an extension of the profile template so that pagination still works separately for each of post, articles & file sharing.</li>
+          <li>Style all email contact forms</li>
+          <li>Add forum options when starting a new topic, i.e. level 1, 2 etc. Use same forum breakdown as in last site. This is basically building separate forums for each category. May use sub-categoryies as in other site. Options will create pull now menues the selection of which populates next option menu.</li>
+          <li>After sending email to a profile user, need a view to show who the email was sent to and allow users send again if not correct. Also email the user their comment to confirm that it was sent.</li>
         </ol>
       </td>
       <td class="table-cell-top todo_list">
@@ -30,19 +35,27 @@
         <ol>
           <li>Deploy on Bluehost</li>
           <li>Add a checkbot question to all contact forms and article submission forms</li>
-          <li>Change layout of post to look less like a table as on Discourse site</li>
+          <li>Change layout of post to look less like a table and more like on Discourse site</li>
+          <li>Should only be able to vote up or down once not each once as it is now.</li>
+          <li>Setup local css, jquery etc. files to run in case CDN's can't be reached</li>
         </ol>
       </td>
       <td class="table-cell-top todo_list">
         <ol>
-          <li>Vote up or down individual posts in threads.</li>
-          <li>Report abuse button on each post</li>
+          <li><strike>Vote up or down</strike></li>
+          <ul>
+            <li><strike>posts</strike></li>
+            <li><strike>articles</strike></li>
+            <li><strike>files</strike></li>
+          </ul>
+          <li><strike>Report abuse button on each post</strike></li>
+          <li>Add JS prompt to allow users add reason for reporting a post. Email this reason with the email.</li>
+          <li>Add comment capablilites to articles</li>
           <li>Add Bio form/edit/delete to profiles for users to describe themselves</li>
           <li>Add to user list number of posts, number of topics started, date joined</li>
           <li>Get tinyMCE to work with forms</li>
           <li>In forum.html table column for number of users who contributed to a topic</li>
           <li>About -> who created this site and why.... tutors needlessly repeating notes, place for tutors to discuss etc...</li>
-          <li>After sending email to a profile user, need a view to show who the email was sent to and allow users send again if not correct</li>
         </ol>
       </td>
     </tr>
