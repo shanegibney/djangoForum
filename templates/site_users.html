@@ -1,24 +1,42 @@
-{% extends 'index.html' %}
-{% block homepage %}
+{% extends 'index.html' %} {% block homepage %}
 <h2>Site Users</h2>
 <div>
-    {% if users_model %}
-    <ul>
+  {% if users_model %}
+  <div class="table-responsive">
+    <table class='table table-striped table-hover'>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Last logged in</th>
+          <th>Joined</th>
+          <th>Posts</th>
+          <th>Articles</th>
+          <th>Files</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for item in users_model %}
-        <li><a href="{% url 'profile' item.id %}">{{ item.username }}</a></li>
+        <tr>
+          <td><a href="{% url 'profile' item.id %}">{{ item.username }}</a></td>
+          <td class="icon-nowrap"><span title="last active {{ item.last_login }}">{{ item.last_login|timesince:current_time }}</span></td>
+          <td><span title="{{ item.username }} joined {{ item.date_joined }}">Joined {{ item.date_joined|timesince:current_time}} ago</span></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
         {% endfor %}
-    </ul>
-    <span class="step-links pagination">
+      </tbody>
+    </table>
+  </div>
+  <span class="step-links pagination">
         {% if users_model.has_previous %}
             <a href="?page={{ users_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
-        {% endif %}
-        <span class="current">
+  {% endif %}
+  <span class="current">
             Page {{ users_model.number }} of {{ users_model.paginator.num_pages }}
-        </span>
-        {% if users_model.has_next %}
-            <a href="?page={{ users_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
-        {% endif %}
-    </span>
+        </span> {% if users_model.has_next %}
+  <a href="?page={{ users_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a> {% endif %}
+  </span>
   {% endif %}
 </div>
 {% endblock %}

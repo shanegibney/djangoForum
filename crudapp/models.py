@@ -7,6 +7,25 @@ from tinymce.models import HTMLField
 from django.db import models
 from tinymce.widgets import TinyMCE
 
+class InfoModel(models.Model):
+    name = models.ForeignKey(User)
+    user = models.CharField(max_length=30)
+    vote = models.IntegerField(default=0)
+    category1 = 'category 1'
+    category2 = 'category 2'
+    category3 = 'category 3'
+    category4 = 'category 4'
+    categories = (
+        (category1, 'category 1'),
+        (category2, 'category 2'),
+        (category3, 'category 3'),
+        (category4, 'category 4'),
+    )
+    category = models.CharField(
+        max_length = 10,
+        choices = categories,
+        default = category4,
+    )
 
 class BlogModel(models.Model):
     title = models.CharField(max_length=100)

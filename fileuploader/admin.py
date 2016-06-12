@@ -1,4 +1,9 @@
 from django.contrib import admin
 from .models import FileModel
+from .forms import FileForm
 
-admin.site.register(FileModel)
+class FileModelAdmin(admin.ModelAdmin):
+    form = FileForm
+    fields = ('title', 'description', 'pub_date', 'submitted_date', 'author', 'user', 'approved', 'upload', 'vote')
+    pass
+admin.site.register(FileModel, FileModelAdmin)

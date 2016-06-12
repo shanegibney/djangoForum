@@ -11,6 +11,7 @@ from django.contrib.staticfiles import views
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url(r'^$', home.init, name='init'),
+    url(r'^info/$', home.info, name='info'),
     url(r'^edit/(?P<id>\d+)/$', home.edit, name='edit'),
     url(r'^delete/(?P<id>\d+)/$', home.delete, name='delete'),
     url(r'^vote_up/(?P<id>\d+)/$', home.vote_up, name='vote_up'),

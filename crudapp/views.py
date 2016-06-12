@@ -1,15 +1,82 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel
+from django.db import models
+from .models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel
+from fileuploader.models import FileModel
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum
 from django import forms
-from .forms import TopicForm, PostForm, BlogForm
+from .forms import TopicForm, PostForm, BlogForm, InfoForm
 from django.utils import timezone
 from datetime import date, timedelta
-from django.views.generic.base import TemplateView
+# from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+def init(request):
+    postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
+    paginator = Paginator(postModel, 8)
+    page2 = request.GET.get('page')
+    try:
+        forum_model = paginator.page(page2)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        forum_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        forum_model = paginator.page(paginator.num_pages)
+
+    blogModel = BlogModel.objects.all().order_by('pub_date').reverse()
+    paginator = Paginator(blogModel, 5)
+    page = request.GET.get('blog')
+    try:
+        blog_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model = paginator.page(paginator.num_pages)
+    # context = {'blog_model': blog_model}
+
+    totalposts = PostModel.objects.annotate(Count('post'))
+    totalusers = User.objects.annotate(Count('id'))
+    totalfiles = FileModel.objects.filter(approved=True).annotate(Count('upload'))
+    totalarticles = BlogModel.objects.filter(approved=True).annotate(Count('article'))
+    totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
+    # If there are topis with no posts the number of topics below will still be correct
+    totaltopics = PostModel.objects.aggregate(numtopics = Count('topic__id', distinct=True))
+    context = {'blog_model': blog_model, 'forum_model': forum_model, 'current_time':   timezone.now(), 'totalarticles': totalarticles, 'totalfiles': totalfiles, 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
+    return render(request, 'forum.html', context)
+
+
+def info(request):
+    if request.method == "POST":
+        # userInstance = get_object_or_404(User, username = request.user)
+        # using .get() because each user has a unique record
+        userInstance = User.objects.get(username = request.user)
+        Iform = InfoForm(   request.POST)
+        if Iform.is_valid():
+            iform = Iform.save(commit=False)
+            iform.name = userInstance #this needs to be a user instance
+            iform.user = request.user
+            iform.save() #returns request and ids
+            return redirect('info')
+    else:
+        info_model = InfoModel.objects.all()
+        paginator = Paginator(info_model, 6)
+        page = request.GET.get('page')
+        try:
+            info = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            info = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            info = paginator.page(paginator.num_pages)
+        infoform = InfoForm()
+    return render(request, 'info.html', {'infoform': infoform, 'info': info})
 
 
 def blog_form(request):
@@ -81,7 +148,7 @@ def vote_down_article(request, id):
 
 
 def blog(request):
-    blogModel = BlogModel.objects.all().order_by('pub_date').reverse()
+    blogModel = BlogModel.objects.filter(approved=True).order_by('pub_date').reverse()
     paginator = Paginator(blogModel, 6)
     page = request.GET.get('page')
     try:
@@ -96,25 +163,7 @@ def blog(request):
     return render(request, 'blog.html', context)
 
 # Create your views here.
-def init(request):
-    postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC LIMIT 0,20'))
-    paginator = Paginator(postModel, 10)
-    page = request.GET.get('page')
-    try:
-        forum_model = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        forum_model = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        forum_model = paginator.page(paginator.num_pages)
 
-    totalposts = PostModel.objects.annotate(Count('post'))
-    totaltopics = TopicModel.objects.annotate(postfreq = Count('topic'))
-    totalusers = User.objects.annotate(postfreq = Count('id'))
-    totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
-    context = {'forum_model': forum_model, 'current_time':   timezone.now(), 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
-    return render(request, 'forum.html', context)
 
 def profile_contact(request, id):
     user = User.objects.all().filter(pk = id)
@@ -212,7 +261,7 @@ def site_users(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         users_model = paginator.page(paginator.num_pages)
 
-    return render(request, 'site_users.html', {'users_model': users_model})
+    return render(request, 'site_users.html', {'users_model': users_model, 'current_time':   timezone.now()})
 
 #display thread of posts and form for next post
 def thread(request, id):
@@ -231,8 +280,8 @@ def thread(request, id):
             pform.save()
             return redirect('thread', id)
     else:
-        pk=s
-        pModel = PostModel.objects.all().filter(topic_id = pk).reverse()
+        pk=id
+        pModel = PostModel.objects.all().filter(topic_id = pk).order_by('pub_date').reverse()
         paginator = Paginator(pModel, 10)
         page = request.GET.get('page')
         try:

@@ -1,14 +1,17 @@
-{% extends 'index.html' %} {% block homepage %}
+{% load fileuploader_tags %}
+{% block sidebar %}
 <h2>File Sharing</h2>
 <p>{% if user.is_authenticated %}Submit an File: <a href="{% url 'file_sharing_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
 <div>
+  <p>I can be seen</p>
   {% if file_model %}
+  <p>can you see me?</p>
   <div class="col-md-8 well">
     {% for item in file_model %}
     {% if item.approved %}
     <h3>{{ item.title }}</h3>
-    <h5>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h5>
-    <p>Description  {{ item.description}}</p>
+    <h5>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, published {{ item.pub_date}}</h5>
+    <p>Description {{ item.description}}</p>
     <p>Download <a href="/{{ MEDIA_URL }}{{ item.upload.name}}">media{{ item.upload}}</a></p>
     <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }}</span>
     {% if user.is_authenticated %}
@@ -18,15 +21,7 @@
     {% endif %}
     {% endfor %}
     </br>
-    <span class="step-links pagination">
-        {% if file_model.has_previous %}
-            <a href="?page={{ file_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
-    {% endif %}
-    <span class="current">
-            Page {{ file_model.number }} of {{ file_model.paginator.num_pages }}
-        </span> {% if file_model.has_next %}
-    <a href="?page={{ file_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a> {% endif %}
-    </span>
+
   </div>
   {% endif %}
 </div>

@@ -39,7 +39,7 @@ class EmailForm(forms.Form):
     message = forms.CharField(max_length=800)
 
 class TopicModel(models.Model):
-    topic = models.CharField(max_length = 100)
+    topic = models.CharField(blank=False, max_length = 100)
     topicAuthor = models.CharField(max_length = 100)
     author = models.ForeignKey(User)
     # topic = HTMLField(blank=True)
@@ -49,7 +49,7 @@ class TopicModel(models.Model):
             return self.topic
 
 class PostModel(models.Model):
-    post = HTMLField(blank = True, max_length = 1000)
+    post = HTMLField(blank=False, max_length = 1000)
     pub_date = models.DateTimeField('date published')
     author = models.CharField(max_length = 30)
     user =  models.ForeignKey(User)

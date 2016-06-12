@@ -1,8 +1,8 @@
 {% extends 'index.html' %} {% block homepage %}
 <div>
   <h2>Profile for <strong>{{ name }}</strong></h2>
-  <p>Last logged in {{name.last_login|timesince:current_time}} ago</p>
-  <p>Joined {{name.date_joined|timesince:current_time}} ago</p>
+  <p><span title="{{ name }} last logged in {{ name.last_login }}">Last logged in {{name.last_login|timesince:current_time}} ago</span></p>
+  <p><span title="{{ name }} joined {{ name.date_joined }}">Joined {{name.date_joined|timesince:current_time}} ago</span></p>
   <p>Activity {{ pnumber.count}} posts, {{ tnumber.count }} topics</p>
   {% if user.is_authenticated %}
   <div>
@@ -30,8 +30,8 @@
         <tr>
           <td><a href="{% url 'thread' item.topic_id %}">{{ item.post }}</a></td>
           <td>{{ item.topic.topic }}</td>
-          <td><a href="{% url 'profile' item.topic.author_id %}">{{ item.topic.topicAuthor }}</a></td>
-          <td class="icon-nowrap">{{ item.pub_date|timesince:current_time }}</td>
+          <td><span title="{{ name }}'s profile"><a href="{% url 'profile' item.topic.author_id %}">{{ item.topic.topicAuthor }}</a></span></td>
+          <td class="icon-nowrap"><span title="last active {{ item.pub_date }}">{{ item.pub_date|timesince:current_time }}</span></td>
           <td class="table-cell-center">{{ item.topic.views }}</td>
         </tr>
         {% endfor %}

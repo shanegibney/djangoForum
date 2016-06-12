@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django import forms
 from .forms import FileForm
 from django.utils import timezone
+from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

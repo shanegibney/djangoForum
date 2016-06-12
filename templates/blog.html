@@ -7,7 +7,7 @@
     {% for item in blog_model %}
     {% if item.approved %}
       <h3>{{ item.title }}</h3>
-      <h5>Author <a href="{% url 'profile' item.author_id %}">{{ item.author}}</a>, published {{ item.pub_date}}</h5>
+      <h5>Author <a href="{% url 'profile' item.author_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h5>
       <p>{{ item.article}}</p>
       <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }} </span>
       {% if user.is_authenticated %}

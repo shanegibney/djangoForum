@@ -19,9 +19,8 @@
             {% endif %}
             <th>Post</th>
             <th class="table-cell-center">Author</th>
-            <th>Forum</th>
             <th>Posted</th>
-            <th>Votes</th>
+            <th  class="table-cell-center">Votes</th>
             {% if user.is_authenticated %}
             <th></th>
             <th></th>
@@ -39,7 +38,7 @@
             {% endif %}
             <td>{{ item.post }}</td>
             <td class="table-cell-center" title="profile for {{ item.author }}"><a href="{% url 'profile' item.user_id %}">{{ item.author}}</a></td>
-            <td class="icon-nowrap">{{ item.pub_date|timesince:current_time}} ago</td>
+            <td class="icon-nowrap"><span title="posted {{ item.pub_date }}">{{ item.pub_date|timesince:current_time}} ago</span></td>
             <td id="voted{{ item.id }}" class="table-cell-center">{{ item.vote }}</td>
             {% if user.is_authenticated %}
             <td id="{{ item.id }}" class='vote_up table-cell-center' title="vote up this post"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></td>
