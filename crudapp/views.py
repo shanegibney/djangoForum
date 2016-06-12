@@ -12,7 +12,8 @@ from datetime import date, timedelta
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+# from django.templatetags import fileuploader.fileuploader_tags
+# from fileuploader import fileuploader_tags
 
 def init(request):
     postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
@@ -243,9 +244,11 @@ def profile(request, id):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         profile_model = paginator.page(paginator.num_pages)
+    anumber = BlogModel.objects.filter(author = profileof).filter(approved=True).annotate(articlefreq = Count('article'))
+    fnumber = FileModel.objects.filter(author = profileof).filter(approved=True).annotate(uploadfreq = Count('upload'))
     pnumber = PostModel.objects.filter(author = profileof).annotate(postfreq = Count('post'))
     tnumber = PostModel.objects.filter(author = profileof).values('topic_id').distinct().annotate(topicfreq = Count('topic_id'))
-    return render(request, 'profile.html', {'profile_model': profile_model, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber})
+    return render(request, 'profile.html', {'profile_model': profile_model, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber, 'fnumber': fnumber, 'anumber': anumber})
 
 
 def site_users(request):

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load crudapp_tags %}
+{% load fileuploader_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +52,7 @@
     </div>
     <div class="row">
       <div class="col-md-4">
-        {% block sidebar %} {% render_logged_in_user_list %}{% endblock %}
+        {% block sidebar %} {% file_sharing_sidebar %}{% endblock %}
       </div>
       <div class="col-md-8">
         {% block homepage %} {% endblock %} {% block authentication %} {% endblock %}

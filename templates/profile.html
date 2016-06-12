@@ -3,7 +3,7 @@
   <h2>Profile for <strong>{{ name }}</strong></h2>
   <p><span title="{{ name }} last logged in {{ name.last_login }}">Last logged in {{name.last_login|timesince:current_time}} ago</span></p>
   <p><span title="{{ name }} joined {{ name.date_joined }}">Joined {{name.date_joined|timesince:current_time}} ago</span></p>
-  <p>Activity {{ pnumber.count}} posts, {{ tnumber.count }} topics</p>
+  <p>Activity {{ pnumber.count}} posts, {{ tnumber.count }} topics, {{ anumber.count }} articles, {{ fnumber.count }} files</p>
   {% if user.is_authenticated %}
   <div>
     <p><a href="{% url 'profile_contact' name.id %}" class="btn btn-default">Contact {{ name }}</a></p>

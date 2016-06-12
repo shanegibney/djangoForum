@@ -3,7 +3,7 @@
 <p>{% if user.is_authenticated %}Submit an Article: <a href="{% url 'blog_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
 <div>
   {% if blog_model %}
-  <div class="col-md-8 well">
+  <div class="col-md-12 well">
     {% for item in blog_model %}
     {% if item.approved %}
       <h3>{{ item.title }}</h3>
