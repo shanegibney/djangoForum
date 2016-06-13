@@ -38,7 +38,7 @@ class BlogModel(models.Model):
     approved = models.BooleanField(default=False)
     vote = models.IntegerField(default=0)
     def __str__(self):              # __unicode__ on Python 2
-            return 'approved, ' + str(self.approved) + ' article, ' + self.article
+            return 'Approved, ' + str(self.approved) + ' Article, ' + self.article
 
 class AnnonymousForm(forms.Form):
     name = forms.CharField(max_length=255)
@@ -54,15 +54,19 @@ class TopicModel(models.Model):
     topic = models.CharField(max_length = 100)
     topicAuthor = models.CharField(max_length = 100)
     author = models.ForeignKey(User)
-    level1 = 'L1'
-    level2 = 'L2'
-    level3 = 'L3'
-    level4 = 'L4'
+    level1 = 'Level 1'
+    level2 = 'level 2'
+    level3 = 'level 3'
+    level4 = 'level 4'
+    level5 = 'level 5'
+    level6 = 'level 6'
     YEAR_IN_SCHOOL_CHOICES = (
         (level1, 'Level 1'),
         (level2, 'Level 2'),
         (level3, 'Level 3'),
         (level4, 'Level 4'),
+        (level5, 'Level 5'),
+        (level6, 'Level 6'),
     )
     forum = models.CharField(
         max_length=2,

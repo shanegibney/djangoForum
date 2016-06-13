@@ -28,7 +28,7 @@ def file_sharing_sidebar(context):
         # If page is out of range (e.g. 9999), deliver last page of results.
         file_model = paginator.page(paginator.num_pages)
     context = {'file_model': file_model}
-    return {'file_model': file_model}
+    return {'file_model': file_model, 'current_time': timezone.now()}
     # return render(request, 'sidebar_files.html', context)
 
 # @register.inclusion_tag("results.html")

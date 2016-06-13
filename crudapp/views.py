@@ -18,7 +18,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def init(request):
     postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
     paginator = Paginator(postModel, 8)
-    page2 = request.GET.get('page')
+    page2 = request.GET.get('forum')
     try:
         forum_model = paginator.page(page2)
     except PageNotAnInteger:
@@ -41,6 +41,18 @@ def init(request):
         blog_model = paginator.page(paginator.num_pages)
     # context = {'blog_model': blog_model}
 
+    filemodel = FileModel.objects.all().reverse()
+    paginator = Paginator(filemodel, 20)
+    page = request.GET.get('file')
+    try:
+        file_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        file_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        file_model = paginator.page(paginator.num_pages)
+
     totalposts = PostModel.objects.annotate(Count('post'))
     totalusers = User.objects.annotate(Count('id'))
     totalfiles = FileModel.objects.filter(approved=True).annotate(Count('upload'))
@@ -48,7 +60,7 @@ def init(request):
     totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
     # If there are topis with no posts the number of topics below will still be correct
     totaltopics = PostModel.objects.aggregate(numtopics = Count('topic__id', distinct=True))
-    context = {'blog_model': blog_model, 'forum_model': forum_model, 'current_time':   timezone.now(), 'totalarticles': totalarticles, 'totalfiles': totalfiles, 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
+    context = {'file_model': file_model, 'blog_model': blog_model, 'forum_model': forum_model, 'current_time':   timezone.now(), 'totalarticles': totalarticles, 'totalfiles': totalfiles, 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
     return render(request, 'forum.html', context)
 
 
@@ -151,7 +163,7 @@ def vote_down_article(request, id):
 def blog(request):
     blogModel = BlogModel.objects.filter(approved=True).order_by('pub_date').reverse()
     paginator = Paginator(blogModel, 6)
-    page = request.GET.get('page')
+    page = request.GET.get('blog')
     try:
         blog_model = paginator.page(page)
     except PageNotAnInteger:
@@ -244,11 +256,36 @@ def profile(request, id):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         profile_model = paginator.page(paginator.num_pages)
+
+    blogModel = BlogModel.objects.filter(author = profileof).filter(approved=True).order_by('pub_date').reverse()
+    paginator = Paginator(blogModel, 4)
+    page = request.GET.get('blog')
+    try:
+        blog_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model = paginator.page(paginator.num_pages)
+
+    filemodel = FileModel.objects.filter(author = profileof).filter(approved=True).reverse()
+    paginator = Paginator(filemodel, 10)
+    page = request.GET.get('file')
+    try:
+        file_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        file_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        file_model = paginator.page(paginator.num_pages)
+
     anumber = BlogModel.objects.filter(author = profileof).filter(approved=True).annotate(articlefreq = Count('article'))
     fnumber = FileModel.objects.filter(author = profileof).filter(approved=True).annotate(uploadfreq = Count('upload'))
     pnumber = PostModel.objects.filter(author = profileof).annotate(postfreq = Count('post'))
     tnumber = PostModel.objects.filter(author = profileof).values('topic_id').distinct().annotate(topicfreq = Count('topic_id'))
-    return render(request, 'profile.html', {'profile_model': profile_model, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber, 'fnumber': fnumber, 'anumber': anumber})
+    return render(request, 'profile.html', {'file_model': file_model, 'blog_model': blog_model, 'profile_model': profile_model, 'current_time': timezone.now(), 'name': profileof, 'pnumber': pnumber, 'tnumber': tnumber, 'fnumber': fnumber, 'anumber': anumber})
 
 
 def site_users(request):

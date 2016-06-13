@@ -16,5 +16,5 @@ class FileModel(models.Model):
     approved = models.BooleanField(default=False)
     upload = models.FileField()
     vote = models.IntegerField(default=0)
-    def __str__(self):
-            return self.title
+    def __str__(self):              # __unicode__ on Python 2
+            return 'Approved, ' + str(self.approved) + ' Title, ' + self.title

@@ -19,13 +19,13 @@
   </br>
     <span class="step-links pagination">
         {% if blog_model.has_previous %}
-            <a href="?page={{ blog_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+            <a href="?blog={{ blog_model.previous_page_number }}"><span class="glyphicon glyphicon-arrow-left"></span></a>
         {% endif %}
         <span class="current">
             Page {{ blog_model.number }} of {{ blog_model.paginator.num_pages }}
         </span>
         {% if blog_model.has_next %}
-            <a href="?page={{ blog_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
+            <a href="?blog={{ blog_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a>
         {% endif %}
     </span>
   </div>

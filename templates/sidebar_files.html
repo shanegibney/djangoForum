@@ -1,4 +1,6 @@
-{% load staticfiles %} {% load fileuploader_tags %} {% block sidebar %}
+{% load staticfiles %}
+{% load fileuploader_tags %}
+{% block sidebar %}
 <h2>File Sharing</h2>
 <p>{% if user.is_authenticated %}Submit an File: <a href="{% url 'file_sharing_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
 <div>
@@ -6,12 +8,16 @@
   <div class="col-md-12 well">
     {% for item in file_model %} {% if item.approved %}
     <h3>{{ item.title }}</h3>
-    <h5>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, published {{ item.pub_date}}</h5>
+    <h5>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, <span title="published {{ item.pub_date }}">published {{ item.pub_date|timesince:current_time }} ago</h5>
     <p>Description {{ item.description}}</p>
     <p>Download <a href="/{{ MEDIA_URL }}{{ item.upload.name}}">{{ item.upload.name}}</a></p>
-    <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }}</span> {% if user.is_authenticated %}
+    <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }}</span>
+    {% if user.is_authenticated %}
     <span id="{{ item.id }}" class='vote_up_file table-cell-center'><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></span>
-    <span id="{{ item.id }}" class='vote_down_file table-cell-center'><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></span> {% endif %} {% endif %} {% endfor %}
+    <span id="{{ item.id }}" class='vote_down_file table-cell-center'><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></span>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
     </br>
     <span class="step-links pagination">
       {% if file_model.has_previous %}

@@ -18,7 +18,7 @@
         {% for item in users_model %}
         <tr>
           <td><a href="{% url 'profile' item.id %}">{{ item.username }}</a></td>
-          <td class="icon-nowrap"><span title="last active {{ item.last_login }}">{{ item.last_login|timesince:current_time }}</span></td>
+          <td class="icon-nowrap"><span title="{{ item.username }} last active {{ item.last_login }}">{{ item.last_login|timesince:current_time }}</span></td>
           <td><span title="{{ item.username }} joined {{ item.date_joined }}">Joined {{ item.date_joined|timesince:current_time}} ago</span></td>
           <td></td>
           <td></td>
