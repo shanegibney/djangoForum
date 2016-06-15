@@ -9,7 +9,7 @@ class FileForm(forms.ModelForm):
     class Meta:
         model = FileModel
         # fields = '__all__'
-        fields = ('id', 'title', 'description', 'upload')
+        fields = ('id', 'categories', 'title', 'description', 'upload')
 
     def save(self, force_insert=False, force_update=False, commit=True):
         m = super(FileForm, self).save(commit=False)

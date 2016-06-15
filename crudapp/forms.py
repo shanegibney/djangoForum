@@ -10,7 +10,7 @@ class BlogForm(forms.ModelForm):
     class Meta:
         model = BlogModel
         # fields = '__all__'
-        fields = ('id', 'title', 'article')
+        fields = ('id', 'categories', 'title', 'article')
 
     def save(self, force_insert=False, force_update=False, commit=True):
         m = super(BlogForm, self).save(commit=False)
@@ -33,7 +33,7 @@ class InfoForm(forms.ModelForm):
 class TopicForm(forms.ModelForm):
     class Meta:
         model = TopicModel
-        fields = ('id', 'forum', 'topic')
+        fields = ('id', 'categories', 'topic')
 
 class PostForm(forms.ModelForm):
     class Meta:

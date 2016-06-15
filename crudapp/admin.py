@@ -8,6 +8,8 @@ admin.site.register(InfoModel)
 
 class BlogModelAdmin(admin.ModelAdmin):
     form = BlogForm
-    fields = ('title', 'article', 'pub_date', 'submitted_date', 'author', 'approved')
-    pass
+    fields = ('title', 'article', 'pub_date', 'submitted_date', 'author', 'categories', 'approved')
+    # pass
+    list_display = ['title', 'approved', 'author', 'categories', 'pub_date', 'submitted_date']
+
 admin.site.register(BlogModel, BlogModelAdmin)

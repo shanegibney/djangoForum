@@ -13,18 +13,14 @@ class InfoModel(models.Model):
     vote = models.IntegerField(default=0)
     category1 = 'category 1'
     category2 = 'category 2'
-    category3 = 'category 3'
-    category4 = 'category 4'
     categories = (
         (category1, 'category 1'),
         (category2, 'category 2'),
-        (category3, 'category 3'),
-        (category4, 'category 4'),
     )
     category = models.CharField(
         max_length = 10,
         choices = categories,
-        default = category4,
+        default = category2,
     )
 
 class BlogModel(models.Model):
@@ -34,6 +30,21 @@ class BlogModel(models.Model):
     submitted_date = models.DateTimeField('date submitted')
     # author = models.CharField(max_length=255)
     # user = models.ForeignKey(User)
+    forum_categories = (
+        ('General Help', 'General Help'),
+        ('Submitting Portfolios', 'Submitting Portfolios'),
+        ('General Teaching', 'General Teaching'),
+        ('Level 1 & 2', 'Level 1 & 2'),
+        ('Level 3', 'Level 3'),
+        ('Level 4', 'Level 4'),
+        ('Level 5', 'Level 5'),
+        ('Level 6', 'Level 6'),
+    )
+    categories = models.CharField(
+        max_length=21,
+        choices=forum_categories,
+        default='Level 4',
+    )
     author = models.ForeignKey(User)
     approved = models.BooleanField(default=False)
     vote = models.IntegerField(default=0)
@@ -54,25 +65,37 @@ class TopicModel(models.Model):
     topic = models.CharField(max_length = 100)
     topicAuthor = models.CharField(max_length = 100)
     author = models.ForeignKey(User)
-    level1 = 'Level 1'
-    level2 = 'level 2'
-    level3 = 'level 3'
-    level4 = 'level 4'
-    level5 = 'level 5'
-    level6 = 'level 6'
-    YEAR_IN_SCHOOL_CHOICES = (
-        (level1, 'Level 1'),
-        (level2, 'Level 2'),
-        (level3, 'Level 3'),
-        (level4, 'Level 4'),
-        (level5, 'Level 5'),
-        (level6, 'Level 6'),
+    # gh = 'General Help'
+    # sp = 'Submitting Portfolios'
+    # gt = 'General Teaching'
+    # l12 = 'Level 1 & 2'
+    # l3 = 'Level 3'
+    # l4 = 'Level 4'
+    # l5 = 'Level 5'
+    # l6 = 'Level 6'
+    forum_categories = (
+        ('general Help', 'General Help'),
+        ('Submitting Portfolios', 'Submitting Portfolios'),
+        ('General Teaching', 'General Teaching'),
+        ('Level 1 & 2', 'Level 1 & 2'),
+        ('Level 3', 'Level 3'),
+        ('Level 4', 'Level 4'),
+        ('Level 5', 'Level 5'),
+        ('Level 6', 'Level 6'),
     )
-    forum = models.CharField(
-        max_length=2,
-        choices=YEAR_IN_SCHOOL_CHOICES,
-        default=level4,
+    categories = models.CharField(
+        max_length=21,
+        choices=forum_categories,
+        default='Level 4',
     )
+
+# SHIRT_SIZES = (
+#         ('S', 'Small'),
+#         ('M', 'Medium'),
+#         ('L', 'Large'),
+#     )
+#     name = models.CharField(max_length=60)
+#     shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
     # topic = HTMLField(blank=True)
     #
     # def is_upperclass(self):

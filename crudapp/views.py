@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import models
-from .models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel
+from crudapp.models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel
 from fileuploader.models import FileModel
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum
 from django import forms
-from .forms import TopicForm, PostForm, BlogForm, InfoForm
+from crudapp.forms import TopicForm, PostForm, BlogForm, InfoForm
 from django.utils import timezone
 from datetime import date, timedelta
 # from django.views.generic.base import TemplateView
@@ -161,21 +161,106 @@ def vote_down_article(request, id):
 
 
 def blog(request):
-    blogModel = BlogModel.objects.filter(approved=True).order_by('pub_date').reverse()
-    paginator = Paginator(blogModel, 6)
-    page = request.GET.get('blog')
+    blogModel_general_help = BlogModel.objects.filter(categories='General Help').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_sub_port = BlogModel.objects.filter(categories='Submitting Portfolios').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_gen_teach = BlogModel.objects.filter(categories='General Teaching').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_level12 = BlogModel.objects.filter(categories='Level 1 & 2').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_level3 = BlogModel.objects.filter(categories='Level 3').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_level4 = BlogModel.objects.filter(categories='Level 4').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_level5 = BlogModel.objects.filter(categories='Level 5').filter(approved=True).order_by('pub_date').reverse()
+    blogModel_level6 = BlogModel.objects.filter(categories='Level 6').filter(approved=True).order_by('pub_date').reverse()
+
+    paginator = Paginator(blogModel_general_help, 6)
+    page = request.GET.get('blog_general_help')
     try:
-        blog_model = paginator.page(page)
+        blog_model_general_help = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        blog_model = paginator.page(1)
+        blog_model_general_help = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model = paginator.page(paginator.num_pages)
-    context = {'blog_model': blog_model}
-    return render(request, 'blog.html', context)
+        blog_model_general_help = paginator.page(paginator.num_pages)
 
-# Create your views here.
+
+    paginator = Paginator(blogModel_sub_port, 6)
+    page = request.GET.get('blog_sub_port')
+    try:
+        blog_model_sub_port = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_sub_port = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_sub_port = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_gen_teach, 6)
+    page = request.GET.get('blog_gen_teach')
+    try:
+        blog_model_gen_teach = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_gen_teach = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_gen_teach = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_level12, 6)
+    page = request.GET.get('blog_level12')
+    try:
+        blog_model_level12 = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_level12 = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_level12 = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_level3, 6)
+    page = request.GET.get('blog_level3')
+    try:
+        blog_model_level3 = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_level3 = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_level3 = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_level4, 6)
+    page = request.GET.get('blog_level4')
+    try:
+        blog_model_level4 = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_level4 = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_level4 = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_level5, 6)
+    page = request.GET.get('blog_level5')
+    try:
+        blog_model_level5 = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_level5 = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_level5 = paginator.page(paginator.num_pages)
+
+    paginator = Paginator(blogModel_level6, 6)
+    page = request.GET.get('blog_level6')
+    try:
+        blog_model_level6 = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        blog_model_level6 = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        blog_model_level6 = paginator.page(paginator.num_pages)
+
+    context = {'blog_model_general_help': blog_model_general_help, 'blog_model_sub_port': blog_model_sub_port, 'blog_model_gen_teach': blog_model_gen_teach, 'blog_model_level12': blog_model_level12, 'blog_model_level3': blog_model_level3, 'blog_model_level4': blog_model_level4, 'blog_model_level5': blog_model_level5, 'blog_model_level6': blog_model_level6 }
+    return render(request, 'blog.html', context)
 
 
 def profile_contact(request, id):
@@ -366,9 +451,13 @@ def topic_form(request):
             pform.pub_date = timezone.now()
             pform.save()
             return redirect('init')
+        print 'Error: topic_form is not validating input'
+        return redirect('init')
     else:
         topicform = TopicForm()
         postform = PostForm()
+    # topicform = TopicForm()
+    # postform = PostForm()
     return render(request, 'new_topic.html', {'topicform': topicform, 'postform': postform})
 
 #edit a post
