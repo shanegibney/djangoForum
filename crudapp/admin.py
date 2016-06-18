@@ -4,7 +4,11 @@ from .forms import BlogForm
 
 admin.site.register(TopicModel)
 admin.site.register(PostModel)
-admin.site.register(InfoModel)
+
+class InfoModelAdmin(admin.ModelAdmin):
+    list_display = ['topicid', 'postid', 'author', 'post', 'date']
+
+admin.site.register(InfoModel, InfoModelAdmin)
 
 class BlogModelAdmin(admin.ModelAdmin):
     form = BlogForm

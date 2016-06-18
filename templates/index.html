@@ -112,6 +112,7 @@
             <!-- .nav -->
             <ul class="nav navbar-nav">
               <li><a href="{% url 'init' %}">Home</a></li>
+              <li><a href="{% url 'info' %}">Info</a></li>
               {% if user.is_authenticated and user.username == 'admin' %}
               <li><a href="/admin">Admin</a></li>{% endif %}
               <li><a href="{% url 'todo' %}">To Do</a></li>
@@ -123,7 +124,7 @@
                   </a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="{% static 'init' %}">
+                      <a href="{% url 'forum' 'General' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
                     </li>
                     <li>
@@ -367,7 +368,7 @@
           </a>
           <ul>
             <li>
-              <a href="{% static 'init' %}">
+              <a href="{% url 'init' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
             </li>
             <li>
@@ -859,8 +860,8 @@ $ open index.html</code></pre>
   <!-- /#wrap -->
   <footer class="Footer bg-dark dker">
     <!-- <p>2014 &copy; Metis Bootstrap Admin Template</p> -->
-    <p>Disclaimer: This site is not an official <a href="http://www.qqi.ie">QQI</a> site. The offical<a href="http://www.qqi.ie"> QQI</a> site it can be found at <a href="http://www.qqi.ie">www.qqi.ie</a>. All resources are used at your own risk. <a class="btn btn-primary btn-lg"
-        href="http://www.qqi.ie" role="button">QQI</a></p>
+    <p>Disclaimer: This site is not an official <a href="http://www.qqi.ie">QQI</a> site. The offical<a href="http://www.qqi.ie"> QQI</a> site it can be found at <a class="btn btn-primary btn-lg"
+        href="http://www.qqi.ie" role="button">QQI</a>. All resources are used at your own risk.</p>
   </footer>
   <!-- /#footer -->
 

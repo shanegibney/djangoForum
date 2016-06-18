@@ -5,7 +5,7 @@ from fileuploader.models import FileModel
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum
 from django import forms
-from crudapp.forms import TopicForm, PostForm, BlogForm, InfoForm
+from crudapp.forms import TopicForm, PostForm, BlogForm
 from django.utils import timezone
 from datetime import date, timedelta
 # from django.views.generic.base import TemplateView
@@ -15,9 +15,38 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.templatetags import fileuploader.fileuploader_tags
 # from fileuploader import fileuploader_tags
 
+def forum(request, string):
+    print string
+    # test = PostModel.objects.filter(author="art")
+    # postModel = list(PostModel.objects.raw('SELECT * , max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
+    postModel = PostModel.objects.values('topic_id').annotate(freq=Count('author'), max=Max('pub_date'), contributors=Count('post'))
+    # postModel = list(PostModel.objects.values('topic_id').annotate(freq=Count('topic_id'), contributors=Count('author', distinct=True)))
+    paginator = Paginator(postModel, 20)
+    page = request.GET.get('forum')
+    try:
+        forum_model = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        forum_model = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        forum_model = paginator.page(paginator.num_pages)
+
+
+    # totalposts = PostModel.objects.annotate(Count('post'))
+    # totalusers = User.objects.annotate(Count('id'))
+    # totalfiles = FileModel.objects.filter(approved=True).annotate(Count('upload'))
+    # totalarticles = BlogModel.objects.filter(approved=True).annotate(Count('article'))
+    # totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
+    # If there are topis with no posts the number of topics below will still be correct
+    # totaltopics = PostModel.objects.aggregate(numtopics = Count('topic__id', distinct=True))
+    context = {'forum_model': forum_model, 'current_time': timezone.now()}
+    return render(request, 'forum_by_category.html', context)
+
+
 def init(request):
     postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
-    paginator = Paginator(postModel, 8)
+    paginator = Paginator(postModel, 30)
     page2 = request.GET.get('forum')
     try:
         forum_model = paginator.page(page2)
@@ -65,31 +94,40 @@ def init(request):
 
 
 def info(request):
-    if request.method == "POST":
-        # userInstance = get_object_or_404(User, username = request.user)
-        # using .get() because each user has a unique record
-        userInstance = User.objects.get(username = request.user)
-        Iform = InfoForm(   request.POST)
-        if Iform.is_valid():
-            iform = Iform.save(commit=False)
-            iform.name = userInstance #this needs to be a user instance
-            iform.user = request.user
-            iform.save() #returns request and ids
-            return redirect('info')
-    else:
-        info_model = InfoModel.objects.all()
-        paginator = Paginator(info_model, 6)
-        page = request.GET.get('page')
-        try:
-            info = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            info = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            info = paginator.page(paginator.num_pages)
-        infoform = InfoForm()
-    return render(request, 'info.html', {'infoform': infoform, 'info': info})
+    # if request.method == "POST":
+    #     # userInstance = get_object_or_404(User, username = request.user)
+    #     # using .get() because each user has a unique record
+    #     userInstance = User.objects.get(username = request.user)
+    #     Iform = InfoForm(   request.POST)
+    #     if Iform.is_valid():
+    #         iform = Iform.save(commit=False)
+    #         iform.name = userInstance #this needs to be a user instance
+    #         iform.user = request.user
+    #         iform.save() #returns request and ids
+    #         return redirect('info')
+    # else:
+    # info_model = InfoModel.objects.all()
+    # info_model = InfoModel.objects.all().order_by('date')
+    # info_model = InfoModel.objects.values('topicid')
+    # info_model = InfoModel.objects.values('topicid').annotate(freq=Count('postid'))
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True))#same result as line below
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date')).annotate(freq=Count('postid')).annotate(contributors=Count('author', distinct=True))
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date')).annotate(freq=Count('postid')).annotate(contributors=Count('author', distinct=True)).order_by('date')
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-date')
+    info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True))
+
+
+    paginator = Paginator(info_model, 20)
+    page = request.GET.get('page')
+    try:
+        info = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        info = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        info = paginator.page(paginator.num_pages)
+    return render(request, 'info.html', {'info': info})
 
 
 def blog_form(request):

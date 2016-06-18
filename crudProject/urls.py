@@ -11,6 +11,10 @@ from django.contrib.staticfiles import views
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url(r'^$', home.init, name='init'),
+    # url(r'^(?P<id>\d+)$', home.init, name='init'),
+    # url(r'^forum/$', home.forum, name='forum'),
+    url(r'^forum/(?P<string>[\w\-]+)/$', home.forum, name='forum'),
+    # url(r'^forum/(?P<id>\d+)/$', home.forum, name='forum'),
     url(r'^info/$', home.info, name='info'),
     url(r'^edit/(?P<id>\d+)/$', home.edit, name='edit'),
     url(r'^delete/(?P<id>\d+)/$', home.delete, name='delete'),

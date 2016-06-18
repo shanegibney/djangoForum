@@ -25,10 +25,10 @@ class BlogForm(forms.ModelForm):
 #         model = BlogModel
 #         fields = ('id', 'title', 'article')
 
-class InfoForm(forms.ModelForm):
-    class Meta:
-        model = InfoModel
-        fields = ('id', 'vote', 'category')
+# class InfoForm(forms.ModelForm):
+#     class Meta:
+#         model = InfoModel
+#         fields = ('id', 'vote', 'category')
 
 class TopicForm(forms.ModelForm):
     class Meta:

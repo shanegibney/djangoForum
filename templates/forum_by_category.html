@@ -15,27 +15,27 @@
     <table class='table table-striped table-hover'>
       <thead>
         <tr>
-          <th>Category</th>
-          <th>topic_id</th>
-          <th>Topic</th>
-          <th class="table-cell-center">Topic Started By</th>
-          <th>Last Active</th>
-          <th class="table-cell-center">Views</th>
-          <th class="table-cell-center">Posts</th>
-          <th class="table-cell-center">Contributors</th>
+          <th>topic id</th>
+          <th>topic</th>
+          <th>posts</th>
+          <th>post id</th>
+          <th>post</th>
+          <th>latest pub_date</th>
+          <th>contributors</th>
+          <th>vote</th>
         </tr>
       </thead>
       <tbody>
         {% for item in forum_model %}
         <tr>
-          <td>{{ item.topic.categories }}</td>
-          <td>{{ item.topic_id }}</td>
-          <td><a href="{% url 'thread' item.topic_id %}"><span title="{{ item.post|slice:':300' }}">{{ item.topic.topic }}</span></a></td>
-          <td class="table-cell-center"><a href="{% url 'profile' item.topic.author_id %}"><span title="{{ item.topic.topicAuthor }}'s profile">{{ item.topic.topicAuthor }}</span></a></td>
-          <td class="icon-nowrap"><span title="published {{ item.pub_date }}">{{ item.pub_date|timesince:current_time}}</span></td>
-          <td class="table-cell-center">{{ item.topic.views }}</td>
-          <td class="table-cell-center">{{ item.freq }}</td>
-          <td class="table-cell-center">{{ item.contributors }}</td>
+          <td>{{ item.topic_id}}</td>
+          <td>{{ item.topic }}</td>
+          <td>{{ item.freq}}</td>
+          <td>{{ item.id}}</td>
+          <td>{{ item.post|slice:"45" }}...</td>
+          <td>{{ item.max }}</td>
+          <td>{{ item.contributors }}</td>
+          <td>{{ item.vote }}</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -8,20 +8,11 @@ from django.db import models
 from tinymce.widgets import TinyMCE
 
 class InfoModel(models.Model):
-    name = models.ForeignKey(User)
-    user = models.CharField(max_length=30)
-    vote = models.IntegerField(default=0)
-    category1 = 'category 1'
-    category2 = 'category 2'
-    categories = (
-        (category1, 'category 1'),
-        (category2, 'category 2'),
-    )
-    category = models.CharField(
-        max_length = 10,
-        choices = categories,
-        default = category2,
-    )
+    topicid = models.IntegerField(default=0)
+    postid = models.IntegerField(default=0)
+    author = models.CharField(max_length=30)
+    post = models.CharField(max_length=30)
+    date = models.DateTimeField('date published')
 
 class BlogModel(models.Model):
     title = models.CharField(max_length=100)
