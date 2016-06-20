@@ -15,20 +15,28 @@ class FileModel(models.Model):
     user =  models.ForeignKey(User, default=6)
     approved = models.BooleanField(default=False)
     upload = models.FileField()
+    GeneralHelp = 'GH'
+    SubmittingPortfolios = 'SP'
+    GeneralTeaching = 'GT'
+    Level12 = 'L12'
+    Level3 = 'L3'
+    Level4 = 'L4'
+    Level5 = 'L5'
+    Level6 = 'L6'
     forum_categories = (
-        ('general Help', 'General Help'),
-        ('Submitting Portfolios', 'Submitting Portfolios'),
-        ('General Teaching', 'General Teaching'),
-        ('Level 1 & 2', 'Level 1 & 2'),
-        ('Level 3', 'Level 3'),
-        ('Level 4', 'Level 4'),
-        ('Level 5', 'Level 5'),
-        ('Level 6', 'Level 6'),
+        (GeneralHelp, 'General Help'),
+        (SubmittingPortfolios, 'Submitting Portfolios'),
+        (GeneralTeaching, 'General Teaching'),
+        (Level12, 'Level 1 & 2'),
+        (Level3, 'Level 3'),
+        (Level4, 'Level 4'),
+        (Level5, 'Level 5'),
+        (Level6, 'Level 6'),
     )
     categories = models.CharField(
-        max_length=21,
+        max_length=30,
         choices=forum_categories,
-        default='Level 4',
+        default=Level4,
     )
     vote = models.IntegerField(default=0)
     def __str__(self):              # __unicode__ on Python 2

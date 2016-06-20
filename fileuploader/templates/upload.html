@@ -7,8 +7,8 @@
     {% for item in file_model %}
     {% if item.approved %}
     <h3>{{ item.title }}</h3>
-    <h5>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h5>
-    <p>Description  {{ item.description}}</p>
+    <h5>Category <a href="{% url 'file_sharing' item.categories %}">{{ item.get_categories_display }}</a>, Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h5>
+    <p>Description {{ item.description}}</p>
     <p>Download <a href="/{{ MEDIA_URL }}{{ item.upload.name}}">{{ item.upload}}</a></p>
     <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }}</span>
     {% if user.is_authenticated %}
@@ -28,6 +28,10 @@
     <a href="?page={{ file_model.next_page_number }}"><span class="glyphicon glyphicon-arrow-right"></span></a> {% endif %}
     </span>
   </div>
+  {% else %}
+  <p>
+    There are no files to display.
+  </p>
   {% endif %}
 </div>
 {% endblock %}

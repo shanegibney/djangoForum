@@ -5,7 +5,7 @@ from tinymce.widgets import TinyMCE
 from django.db import models
 from django.utils import timezone
 
-
+# Blog is the articles section of the project
 class BlogForm(forms.ModelForm):
     class Meta:
         model = BlogModel

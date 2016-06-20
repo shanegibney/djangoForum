@@ -12,9 +12,13 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def file_sharing(request):
-    filemodel = FileModel.objects.all().reverse()
-    paginator = Paginator(filemodel, 20)
+def file_sharing(request, categ):
+    if categ == 'all':
+        filemodel = FileModel.objects.all().reverse()
+    else:
+        filemodel = FileModel.objects.filter(categories=categ).reverse()
+
+    paginator = Paginator(filemodel, 10)
     page = request.GET.get('page')
     try:
         file_model = paginator.page(page)

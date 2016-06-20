@@ -7,6 +7,11 @@ from tinymce.models import HTMLField
 from django.db import models
 from tinymce.widgets import TinyMCE
 
+class TempModel(models.Model):
+    topicid = models.IntegerField(default=0)
+    date = models.DateTimeField('date published')
+    author = models.CharField(max_length=30)
+
 class InfoModel(models.Model):
     topicid = models.IntegerField(default=0)
     postid = models.IntegerField(default=0)
@@ -21,20 +26,28 @@ class BlogModel(models.Model):
     submitted_date = models.DateTimeField('date submitted')
     # author = models.CharField(max_length=255)
     # user = models.ForeignKey(User)
+    GeneralHelp = 'GH'
+    SubmittingPortfolios = 'SP'
+    GeneralTeaching = 'GT'
+    Level12 = 'L12'
+    Level3 = 'L3'
+    Level4 = 'L4'
+    Level5 = 'L5'
+    Level6 = 'L6'
     forum_categories = (
-        ('General Help', 'General Help'),
-        ('Submitting Portfolios', 'Submitting Portfolios'),
-        ('General Teaching', 'General Teaching'),
-        ('Level 1 & 2', 'Level 1 & 2'),
-        ('Level 3', 'Level 3'),
-        ('Level 4', 'Level 4'),
-        ('Level 5', 'Level 5'),
-        ('Level 6', 'Level 6'),
+        (GeneralHelp, 'General Help'),
+        (SubmittingPortfolios, 'Submitting Portfolios'),
+        (GeneralTeaching, 'General Teaching'),
+        (Level12, 'Level 1 & 2'),
+        (Level3, 'Level 3'),
+        (Level4, 'Level 4'),
+        (Level5, 'Level 5'),
+        (Level6, 'Level 6'),
     )
     categories = models.CharField(
-        max_length=21,
+        max_length=30,
         choices=forum_categories,
-        default='Level 4',
+        default=Level4,
     )
     author = models.ForeignKey(User)
     approved = models.BooleanField(default=False)
@@ -56,28 +69,28 @@ class TopicModel(models.Model):
     topic = models.CharField(max_length = 100)
     topicAuthor = models.CharField(max_length = 100)
     author = models.ForeignKey(User)
-    # gh = 'General Help'
-    # sp = 'Submitting Portfolios'
-    # gt = 'General Teaching'
-    # l12 = 'Level 1 & 2'
-    # l3 = 'Level 3'
-    # l4 = 'Level 4'
-    # l5 = 'Level 5'
-    # l6 = 'Level 6'
+    GeneralHelp = 'GH'
+    SubmittingPortfolios = 'SP'
+    GeneralTeaching = 'GT'
+    Level12 = 'L12'
+    Level3 = 'L3'
+    Level4 = 'L4'
+    Level5 = 'L5'
+    Level6 = 'L6'
     forum_categories = (
-        ('general Help', 'General Help'),
-        ('Submitting Portfolios', 'Submitting Portfolios'),
-        ('General Teaching', 'General Teaching'),
-        ('Level 1 & 2', 'Level 1 & 2'),
-        ('Level 3', 'Level 3'),
-        ('Level 4', 'Level 4'),
-        ('Level 5', 'Level 5'),
-        ('Level 6', 'Level 6'),
+        (GeneralHelp, 'General Help'),
+        (SubmittingPortfolios, 'Submitting Portfolios'),
+        (GeneralTeaching, 'General Teaching'),
+        (Level12, 'Level 1 & 2'),
+        (Level3, 'Level 3'),
+        (Level4, 'Level 4'),
+        (Level5, 'Level 5'),
+        (Level6, 'Level 6'),
     )
     categories = models.CharField(
-        max_length=21,
+        max_length=30,
         choices=forum_categories,
-        default='Level 4',
+        default=Level4,
     )
 
 # SHIRT_SIZES = (

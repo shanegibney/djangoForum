@@ -29,7 +29,7 @@
       <tbody>
         {% for item in profile_model %}
         <tr>
-          <td>{{ item.topic.categories }}</td>
+          <td><a href="{% url 'forum' item.topic.categories %}">{{ item.topic.get_categories_display }}</a></td>
           <td><a href="{% url 'thread' item.topic_id %}">{{ item.post }}</a></td>
           <td>{{ item.topic.topic }}</td>
           <td><span title="{{ name }}'s profile"><a href="{% url 'profile' item.topic.author_id %}">{{ item.topic.topicAuthor }}</a></span></td>

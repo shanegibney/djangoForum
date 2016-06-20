@@ -2,7 +2,8 @@
 <div>
   <div>
     {% if threadTopic %} {% for item in threadTopic %}
-    <h2><strong>Topic: </strong> {{ item.topic }}</h2>
+    <h2><strong>Topic: </strong>{{ item.topic }}</h2>
+    <h2><strong>Category: <a href="{% url 'forum' item.categories %}"></strong>{{ item.get_categories_display }}</a></h2>
     <h4><strong>Topic started by </strong><a title="profile for {{ item.topicAuthor }}" href="{% url 'profile' item.author_id %}">{{ item.topicAuthor}}</a></h4>
     <p>{{ item.views }} views, {{ numtopicposts.count }} posts, {{ numtopicusers.count }} users</p>
     {% endfor %} {% endif %}

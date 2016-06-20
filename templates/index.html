@@ -70,9 +70,10 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a href="{% url 'init' %}" class="navbar-brand">QQI resources
+            <div class="main-bar">
+            <a href="{% url 'init' %}" class="navbar-brand"></a>&nbsp; QQI resources
                 <!-- <img src="{% static 'assets/img/logo.png' %}" alt=""> -->
-              </a>
+            </div>
           </header>
           <div class="topnav">
             <div class="btn-group">
@@ -112,101 +113,101 @@
             <!-- .nav -->
             <ul class="nav navbar-nav">
               <li><a href="{% url 'init' %}">Home</a></li>
-              <li><a href="{% url 'info' %}">Info</a></li>
-              {% if user.is_authenticated and user.username == 'admin' %}
-              <li><a href="/admin">Admin</a></li>{% endif %}
               <li><a href="{% url 'todo' %}">To Do</a></li>
-              <!-- <li><a href="{% url 'init' %}">Forum</a></li> -->
-              <li class='dropdown '>
+              <li class='dropdown'>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Forum
                     <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="{% url 'forum' 'General' %}">
+                      <a href="{% url 'forum' 'all' %}">
+                        <i class="fa fa-angle-right"></i>&nbsp; All Catgeories </a>
+                    </li>
+                    <li><hr></li>
+                    <li>
+                      <a href="{% url 'forum' 'GH' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header-boxed.html' %}">
+                      <a href="{% url 'forum' 'SP' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
+                      <a href="{% url 'forum' 'GT' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
                     </li>
-                    <a href=" ">
-                      <li class="nav-divider"><i>&nbsp; </i></li>
-                    </a>
+                    <li><hr></li>
                     <li>
-                      <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
+                      <a href="{% url 'forum' 'L12' %}">
+                      <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 3</a>
+                      <a href="{% url 'forum' 'L3' %}">
+                        <i class="fa fa-list"></i>&nbsp; Level 3 </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'forum' 'L4' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 4</a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'forum' 'L5' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 5</a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'forum' 'L6' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 6</a>
                     </li>
                   </ul>
                 </li>
 
-              <!-- <li><a href="{% url 'file_sharing' %}">File Sharing</a></li> -->
-              <li class='dropdown '>
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    File Sharing
-                    <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a href="{% static 'init' %}">
-                        <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header-boxed.html' %}">
-                        <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
-                        <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
-                    </li>
-                    <a href=" ">
-                      <li class="nav-divider"><i>&nbsp; </i></li>
+                <li class='dropdown'>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      Files
+                      <b class="caret"></b>
                     </a>
-                    <li>
-                      <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 3</a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 4</a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 5</a>
-                    </li>
-                    <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 6</a>
-                    </li>
-                  </ul>
-                </li>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="{% url 'file_sharing' 'all' %}">
+                          <i class="fa fa-angle-right"></i>&nbsp; All Categories </a>
+                      </li>
+                      <li><hr></li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'GH' %}">
+                          <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'SP' %}">
+                          <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'GT' %}">
+                          <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
+                      </li>
+                      <li><hr></li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'L12' %}">
+                        <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'L3' %}">
+                          <i class="fa fa-list"></i>&nbsp; Level 3 </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'L4' %}">
+                          <i class="fa fa-list"></i>&nbsp; Level 4</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'L5' %}">
+                          <i class="fa fa-list"></i>&nbsp; Level 5</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'file_sharing' 'L6' %}">
+                          <i class="fa fa-list"></i>&nbsp; Level 6</a>
+                      </li>
+                    </ul>
+                  </li>
 
-              <!-- <li><a href="{% url 'blog' %}">Articles</a></li> -->
               <li class='dropdown '>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Articles
@@ -214,38 +215,41 @@
                   </a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="{% static 'init' %}">
+                      <a href="{% url 'blog' 'all' %}">
+                        <i class="fa fa-angle-right"></i>&nbsp; All Categories </a>
+                    </li>
+                    <li><hr></li>
+                    <li>
+                      <a href="{% url 'blog' 'GH' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header-boxed.html' %}">
+                      <a href="{% url 'blog' 'SP' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
+                      <a href="{% url 'blog' 'GT' %}">
                         <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
                     </li>
-                    <a href=" ">
-                      <li class="nav-divider"><i>&nbsp; </i></li>
-                    </a>
+                    <li><hr></li>
                     <li>
-                      <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
+                      <a href="{% url 'blog' 'L12' %}">
+                      <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
-                        <i class="fa fa-list"></i>&nbsp; Level 3</a>
+                      <a href="{% url 'blog' 'L3' %}">
+                        <i class="fa fa-list"></i>&nbsp; Level 3 </a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'blog' 'L4' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 4</a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'blog' 'L5' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 5</a>
                     </li>
                     <li>
-                      <a href="{% static 'fixed-header.html' %}">
+                      <a href="{% url 'blog' 'L6' %}">
                         <i class="fa fa-list"></i>&nbsp; Level 6</a>
                     </li>
                   </ul>
@@ -324,38 +328,39 @@
           </a>
           <ul>
             <li>
-              <a href="{% static 'init' %}">
+              <a href="{% url 'forum' 'all' %}">
+                <i class="fa fa-angle-right"></i>&nbsp; All Categories </a>
+            </li>
+            <li>
+              <a href="{% url 'forum' 'GH' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-boxed.html' %}">
+              <a href="{% url 'forum' 'SP' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
+              <a href="{% url 'forum' 'GT' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
             </li>
-            <a href=" ">
-              <li class="nav-divider"><i>&nbsp; </i></li>
-            </a>
             <li>
-              <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
+              <a href="{% url 'forum' 'L12' %}">
+              <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 3</a>
+              <a href="{% url 'forum' 'L3' %}">
+                <i class="fa fa-list"></i>&nbsp; Level 3 </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'forum' 'L4' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 4</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'forum' 'L5' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 5</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'forum' 'L6' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 6</a>
             </li>
           </ul>
@@ -368,38 +373,39 @@
           </a>
           <ul>
             <li>
-              <a href="{% url 'init' %}">
+              <a href="{% url 'file_sharing' 'all' %}">
+                <i class="fa fa-angle-right"></i>&nbsp; All Categories </a>
+            </li>
+            <li>
+              <a href="{% url 'file_sharing' 'GH' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-boxed.html' %}">
+              <a href="{% url 'file_sharing' 'SP' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
+              <a href="{% url 'file_sharing' 'GT' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
             </li>
-            <a href=" ">
-              <li class="nav-divider"><i>&nbsp; </i></li>
-            </a>
             <li>
-              <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
+              <a href="{% url 'file_sharing' 'L12' %}">
+              <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 3</a>
+              <a href="{% url 'file_sharing' 'L3' %}">
+                <i class="fa fa-list"></i>&nbsp; Level 3 </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'file_sharing' 'L4' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 4</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'file_sharing' 'L5' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 5</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'file_sharing' 'L6' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 6</a>
             </li>
           </ul>
@@ -414,38 +420,39 @@
           </a>
           <ul>
             <li>
-              <a href="{% static 'init' %}">
+              <a href="{% url 'blog' 'all' %}">
+                <i class="fa fa-angle-right"></i>&nbsp; All Categories </a>
+            </li>
+            <li>
+              <a href="{% url 'blog' 'GH' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Help </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-boxed.html' %}">
+              <a href="{% url 'blog' 'SP' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; Submitting Portfolios </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header-fixed-mini-sidebar.html' %}">
+              <a href="{% url 'blog' 'GT' %}">
                 <i class="fa fa-angle-right"></i>&nbsp; General Teaching </a>
             </li>
-            <a href=" ">
-              <li class="nav-divider"><i>&nbsp; </i></li>
-            </a>
             <li>
-              <a href="{% static 'fixed-header-mini-sidebar.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2 </a>
+              <a href="{% url 'blog' 'L12' %}">
+              <i class="fa fa-list"></i>&nbsp; Level 1 &amp; 2</i></a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
-                <i class="fa fa-list"></i>&nbsp; Level 3</a>
+              <a href="{% url 'blog' 'L3' %}">
+                <i class="fa fa-list"></i>&nbsp; Level 3 </a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'blog' 'L4' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 4</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'blog' 'L5' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 5</a>
             </li>
             <li>
-              <a href="{% static 'fixed-header.html' %}">
+              <a href="{% url 'blog' 'L6' %}">
                 <i class="fa fa-list"></i>&nbsp; Level 6</a>
             </li>
           </ul>

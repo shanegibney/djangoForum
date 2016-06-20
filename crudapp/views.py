@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import models
-from crudapp.models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel
+from crudapp.models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel, TempModel
 from fileuploader.models import FileModel
 from django.contrib.auth.models import User
-from django.db.models import Count, Max, Sum
+from django.db.models import Count, Max, Sum, F
 from django import forms
 from crudapp.forms import TopicForm, PostForm, BlogForm
 from django.utils import timezone
@@ -15,12 +15,42 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.templatetags import fileuploader.fileuploader_tags
 # from fileuploader import fileuploader_tags
 
-def forum(request, string):
-    print string
-    # test = PostModel.objects.filter(author="art")
-    # postModel = list(PostModel.objects.raw('SELECT * , max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
-    postModel = PostModel.objects.values('topic_id').annotate(freq=Count('author'), max=Max('pub_date'), contributors=Count('post'))
-    # postModel = list(PostModel.objects.values('topic_id').annotate(freq=Count('topic_id'), contributors=Count('author', distinct=True)))
+def temp(request):
+    info2 = TempModel.objects.all()
+    info = TempModel.objects.values('topicid').annotate( max=Max('date')).order_by('-max')
+
+    columnlist = []
+    for item in info2:
+         columnlist.append([item])
+
+    for item in info:
+        for i in range(len(columnlist)):
+            if item['max'] == columnlist[i][0].date:
+                item['author'] = columnlist[i][0].author
+
+    return render(request, 'template.html', {'info': info, 'info2': info2})
+
+
+def forum(request, categ):
+    postModelAll = PostModel.objects.all()
+    if categ == 'all':
+        postModel = PostModel.objects.all().values('topic_id').annotate( max=Max('pub_date'), freq=Count('topic_id'), contributors=Count('author', distinct=True)).order_by('-max')
+    else:
+        postModel = PostModel.objects.filter(topic__categories = categ).values('topic_id').annotate( max=Max('pub_date'), freq=Count('topic_id'), contributors=Count('author', distinct=True)).order_by('-max')
+
+    columnlist = []
+    for item in postModelAll:
+         columnlist.append([item])
+
+    # this foreignkey stuff could probably be done more efficiently using an instance
+    for item in postModel:
+        for i in range(len(columnlist)):
+            if item['max'] == columnlist[i][0].pub_date:
+                item['topic'] = columnlist[i][0].topic
+                item['post'] = columnlist[i][0].post
+
+    # level = postModel.topic.get_categories_.diplay()
+
     paginator = Paginator(postModel, 20)
     page = request.GET.get('forum')
     try:
@@ -31,22 +61,42 @@ def forum(request, string):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         forum_model = paginator.page(paginator.num_pages)
+    if categ == 'all':
+        totalposts = PostModel.objects.all().annotate(Count('post'))
+        # totalusers = TopicModel.objects.filter(categories = categ).values('author_id').annotate(Count('author_id', distinct=True))
+        totalusers = TopicModel.objects.all().annotate(Count('author_id', distinct=True))
+        # totalusers = TopicModel.objects.filter(categories = categ).aggregate(numusers = Sum('author', distinct=True))
+        totalviews = TopicModel.objects.all().aggregate(numviews = Sum('views'))
+    else:
+        totalposts = PostModel.objects.filter(topic__categories=categ).annotate(Count('post'))
+        # totalusers = TopicModel.objects.filter(categories = categ).values('author_id').annotate(Count('author_id', distinct=True))
+        totalusers = TopicModel.objects.filter(categories = categ).annotate(Count('author_id', distinct=True))
+        # totalusers = TopicModel.objects.filter(categories = categ).aggregate(numusers = Sum('author', distinct=True))
+        totalviews = TopicModel.objects.filter(categories = categ).aggregate(numviews = Sum('views'))
 
-
-    # totalposts = PostModel.objects.annotate(Count('post'))
-    # totalusers = User.objects.annotate(Count('id'))
-    # totalfiles = FileModel.objects.filter(approved=True).annotate(Count('upload'))
-    # totalarticles = BlogModel.objects.filter(approved=True).annotate(Count('article'))
-    # totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
-    # If there are topis with no posts the number of topics below will still be correct
+    # If there are topics with no posts the number of topics below will still be correct
     # totaltopics = PostModel.objects.aggregate(numtopics = Count('topic__id', distinct=True))
-    context = {'forum_model': forum_model, 'current_time': timezone.now()}
+    context = {'forum_model': forum_model, 'totalposts': totalposts, 'totalusers': totalusers, 'totalviews': totalviews, 'current_time': timezone.now()}
     return render(request, 'forum_by_category.html', context)
 
 
 def init(request):
-    postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
-    paginator = Paginator(postModel, 30)
+    # postModel = list(PostModel.objects.raw('SELECT *, max(pub_date), count(topic_id) AS freq, count(DISTINCT author) AS contributors FROM crudapp_postmodel GROUP BY topic_id ORDER BY pub_date DESC'))
+    postModelAll = PostModel.objects.all()
+    postModel = PostModel.objects.values('topic_id').annotate( max=Max('pub_date'), freq=Count('topic_id'), contributors=Count('author', distinct=True)).order_by('-max')
+
+    columnlist = []
+    for item in postModelAll:
+         columnlist.append([item])
+
+    # this foreignkey stuff could probably be done more efficiently using an instance
+    for item in postModel:
+        for i in range(len(columnlist)):
+            if item['max'] == columnlist[i][0].pub_date:
+                item['topic'] = columnlist[i][0].topic
+                item['post'] = columnlist[i][0].post
+
+    paginator = Paginator(postModel, 10)
     page2 = request.GET.get('forum')
     try:
         forum_model = paginator.page(page2)
@@ -57,31 +107,6 @@ def init(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         forum_model = paginator.page(paginator.num_pages)
 
-    blogModel = BlogModel.objects.all().order_by('pub_date').reverse()
-    paginator = Paginator(blogModel, 5)
-    page = request.GET.get('blog')
-    try:
-        blog_model = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model = paginator.page(paginator.num_pages)
-    # context = {'blog_model': blog_model}
-
-    filemodel = FileModel.objects.all().reverse()
-    paginator = Paginator(filemodel, 20)
-    page = request.GET.get('file')
-    try:
-        file_model = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        file_model = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        file_model = paginator.page(paginator.num_pages)
-
     totalposts = PostModel.objects.annotate(Count('post'))
     totalusers = User.objects.annotate(Count('id'))
     totalfiles = FileModel.objects.filter(approved=True).annotate(Count('upload'))
@@ -89,7 +114,7 @@ def init(request):
     totalviews = TopicModel.objects.aggregate(numviews = Sum('views'))
     # If there are topis with no posts the number of topics below will still be correct
     totaltopics = PostModel.objects.aggregate(numtopics = Count('topic__id', distinct=True))
-    context = {'file_model': file_model, 'blog_model': blog_model, 'forum_model': forum_model, 'current_time':   timezone.now(), 'totalarticles': totalarticles, 'totalfiles': totalfiles, 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
+    context = {'forum_model': forum_model, 'current_time':  timezone.now(), 'totalarticles': totalarticles, 'totalfiles': totalfiles, 'totalposts': totalposts, 'totaltopics': totaltopics, 'totalusers': totalusers, 'totalviews': totalviews}
     return render(request, 'forum.html', context)
 
 
@@ -114,8 +139,44 @@ def info(request):
     # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date')).annotate(freq=Count('postid')).annotate(contributors=Count('author', distinct=True))
     # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date')).annotate(freq=Count('postid')).annotate(contributors=Count('author', distinct=True)).order_by('date')
     # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-date')
-    info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True))
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True))
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter(post='max')
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').all()
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter(topicid=2)
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter(author__date='max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter(date=F('max'))
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter('post').get(date='max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter(post='post')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').values('post','author')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').get('post')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').filter('date'__date='max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.all().extra(select={"post": 'post'}).values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.all().values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max').extra(select={"post": 'post'})
+    # info_model = InfoModel.objects.all().extra(select={"post": 'post'}).values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.all().extra(select={"post": 'post'}).values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.extra(select={"post": 'post'}).values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    # info_model = InfoModel.objects.extra(select={'post': 'post'}).values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
+    info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True)).order_by('-max')
 
+    info2 = InfoModel.objects.all()
+    # info = TempModel.objects.values('topicid').annotate( max=Max('date')).order_by('-max')
+
+    columnlist = []
+    for item in info2:
+         columnlist.append([item])
+
+    for item in info_model:
+        for i in range(len(columnlist)):
+            if item['max'] == columnlist[i][0].date:
+                item['author'] = columnlist[i][0].author
+                item['post'] = columnlist[i][0].post
+                print item['max']
+
+    # info_model = InfoModel.objects.values('topicid').annotate( max=Max('date'), freq=Count('postid'), contributors=Count('author', distinct=True))
+    # info_model = list(InfoModel.objects.raw('SELECT *, max(date), count(postid) AS freq, count(DISTINCT author) AS contributors FROM crudapp_infomodel GROUP BY topicid ORDER BY date DESC'))
 
     paginator = Paginator(info_model, 20)
     page = request.GET.get('page')
@@ -198,106 +259,24 @@ def vote_down_article(request, id):
     return HttpResponse(posts.vote, content_type="text/plain")
 
 
-def blog(request):
-    blogModel_general_help = BlogModel.objects.filter(categories='General Help').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_sub_port = BlogModel.objects.filter(categories='Submitting Portfolios').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_gen_teach = BlogModel.objects.filter(categories='General Teaching').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_level12 = BlogModel.objects.filter(categories='Level 1 & 2').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_level3 = BlogModel.objects.filter(categories='Level 3').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_level4 = BlogModel.objects.filter(categories='Level 4').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_level5 = BlogModel.objects.filter(categories='Level 5').filter(approved=True).order_by('pub_date').reverse()
-    blogModel_level6 = BlogModel.objects.filter(categories='Level 6').filter(approved=True).order_by('pub_date').reverse()
+def blog(request, categ):
+    if categ == 'all':
+        blogModel = BlogModel.objects.all().filter(approved=True).order_by('pub_date').reverse()
+    else:
+        blogModel = BlogModel.objects.filter(categories=categ).filter(approved=True).order_by('pub_date').reverse()
 
-    paginator = Paginator(blogModel_general_help, 6)
-    page = request.GET.get('blog_general_help')
+    paginator = Paginator(blogModel, 6)
+    page = request.GET.get('blog')
     try:
-        blog_model_general_help = paginator.page(page)
+        blog_model = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        blog_model_general_help = paginator.page(1)
+        blog_model = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_general_help = paginator.page(paginator.num_pages)
+        blog_model = paginator.page(paginator.num_pages)
 
-
-    paginator = Paginator(blogModel_sub_port, 6)
-    page = request.GET.get('blog_sub_port')
-    try:
-        blog_model_sub_port = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_sub_port = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_sub_port = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_gen_teach, 6)
-    page = request.GET.get('blog_gen_teach')
-    try:
-        blog_model_gen_teach = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_gen_teach = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_gen_teach = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_level12, 6)
-    page = request.GET.get('blog_level12')
-    try:
-        blog_model_level12 = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_level12 = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_level12 = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_level3, 6)
-    page = request.GET.get('blog_level3')
-    try:
-        blog_model_level3 = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_level3 = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_level3 = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_level4, 6)
-    page = request.GET.get('blog_level4')
-    try:
-        blog_model_level4 = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_level4 = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_level4 = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_level5, 6)
-    page = request.GET.get('blog_level5')
-    try:
-        blog_model_level5 = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_level5 = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_level5 = paginator.page(paginator.num_pages)
-
-    paginator = Paginator(blogModel_level6, 6)
-    page = request.GET.get('blog_level6')
-    try:
-        blog_model_level6 = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        blog_model_level6 = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        blog_model_level6 = paginator.page(paginator.num_pages)
-
-    context = {'blog_model_general_help': blog_model_general_help, 'blog_model_sub_port': blog_model_sub_port, 'blog_model_gen_teach': blog_model_gen_teach, 'blog_model_level12': blog_model_level12, 'blog_model_level3': blog_model_level3, 'blog_model_level4': blog_model_level4, 'blog_model_level5': blog_model_level5, 'blog_model_level6': blog_model_level6 }
+    context = {'blog_model': blog_model }
     return render(request, 'blog.html', context)
 
 
