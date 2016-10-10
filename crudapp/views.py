@@ -212,14 +212,13 @@ def blog_form(request):
             message += '\n Author: ' + str(bform.author) + '\n'
             message += '\n Article: ' + str(bform.article) + '\n'
             message += '\n http://localhost:8000/admin' + '\n'
+            print '\n' + 'subject: ' + subject + '\n' + 'to_email: ' + to_email + '\n' + 'from_email: ' + from_email + '\n' + message
             send_mail(subject, message, from_email, [to_email])
             return redirect('init')
     else:
         blogform = BlogForm()
     return render(request, 'blog_form.html', {'blogform': blogform})
 
-def report(request, id):
-    reports = PostModel.objects.get(pk = id)
     admin_email = User.objects.all().filter(is_superuser = True)
     subject = 'A QQIresources post has been reported by ' + str(request.user)
     to_email = admin_email[0].email

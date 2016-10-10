@@ -1,11 +1,19 @@
 {% extends 'index.html' %} {% block homepage %}
-<div class="post">
-  <table>
+        <div class="container">
+   <div class="row">
+     <div class="col-md-12">
+     <!-- or use any other number .col-md- -->
+         <div class="table-responsive">
+             <div class="table">
+                 
+        <thead>
     <tr>
       <th class="todo_list"></th>
       <th class="important todo_list">Important</th>
       <th class="important todo_list">Not Important</th>
     </tr>
+        </thead>
+        <tbody>
     <tr>
       <td class="urgent todo_list"><strong>Urgent</strong></td>
       <td class="table-cell-top todo_list">
@@ -61,6 +69,10 @@
         </ol>
       </td>
     </tr>
+    </tbody>
   </table>
+</div>
+</div>
+</div>
 </div>
 {% endblock %}
