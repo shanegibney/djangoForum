@@ -5,11 +5,11 @@ from django import forms
 # from django.utils import timezone
 # from tinymce.models import HTMLField
 
-
 class FileModel(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', blank=True)
+    # pub_date = models.DateTimeField('date published')
     submitted_date = models.DateTimeField('date submitted')
     author = models.CharField(max_length=255)
     user =  models.ForeignKey(User, default=6)

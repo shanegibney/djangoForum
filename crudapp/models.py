@@ -7,6 +7,12 @@ from tinymce.models import HTMLField
 from django.db import models
 from tinymce.widgets import TinyMCE
 
+class NewUserModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    posts = models.IntegerField(default=0)
+    articles = models.IntegerField(default=0)
+    files = models.IntegerField(default=0)
+
 class TempModel(models.Model):
     topicid = models.IntegerField(default=0)
     date = models.DateTimeField('date published')
@@ -24,8 +30,6 @@ class BlogModel(models.Model):
     article = models.CharField(max_length=255)
     pub_date = models.DateTimeField('date published')
     submitted_date = models.DateTimeField('date submitted')
-    # author = models.CharField(max_length=255)
-    # user = models.ForeignKey(User)
     GeneralHelp = 'GH'
     SubmittingPortfolios = 'SP'
     GeneralTeaching = 'GT'
@@ -92,18 +96,6 @@ class TopicModel(models.Model):
         choices=forum_categories,
         default=Level4,
     )
-
-# SHIRT_SIZES = (
-#         ('S', 'Small'),
-#         ('M', 'Medium'),
-#         ('L', 'Large'),
-#     )
-#     name = models.CharField(max_length=60)
-#     shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES)
-    # topic = HTMLField(blank=True)
-    #
-    # def is_upperclass(self):
-    #     return self.year_in_school in (self.JUNIOR, self.SENIOR)
 
     views = models.PositiveIntegerField(default = 0)
     def __str__(self):              # __unicode__ on Python 2

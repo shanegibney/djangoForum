@@ -9,9 +9,9 @@
           <th></th>
           <th>Last logged in</th>
           <th>Joined</th>
-          <th>Posts</th>
-          <th>Articles</th>
-          <th>Files</th>
+          <th class="table-cell-center">Posts</th>
+          <th class="table-cell-center">Articles</th>
+          <th class="table-cell-center">Files</th>
         </tr>
       </thead>
       <tbody>
@@ -20,9 +20,9 @@
           <td><a href="{% url 'profile' item.id %}">{{ item.username }}</a></td>
           <td class="icon-nowrap"><span title="{{ item.username }} last active {{ item.last_login }}">{{ item.last_login|timesince:current_time }}</span></td>
           <td><span title="{{ item.username }} joined {{ item.date_joined }}">Joined {{ item.date_joined|timesince:current_time}} ago</span></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td class="table-cell-center">{% if item.newusermodel.posts %}{{ item.newusermodel.posts }}{% else %}-{% endif %}</td>
+          <td class="table-cell-center">{% if item.newusermodel.articles %}{{ item.newusermodel.articles }}{% else %}-{% endif %}</td>
+          <td class="table-cell-center">{% if item.newusermodel.files %}{{ item.newusermodel.files }}{% else %}-{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>

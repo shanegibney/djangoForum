@@ -1,7 +1,7 @@
 arrow==0.7.0
 beautifulsoup4==4.4.1
 disqus==0.0.4
-Django==1.9.5
+Django==1.10.2
 django-allauth==0.25.2
 django-allauth-bootstrap==0.1
 django-emoticons==1.1.2

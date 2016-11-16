@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import models
-from crudapp.models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel, TempModel
+from crudapp.models import TopicModel, PostModel, EmailForm, AnnonymousForm, BlogModel, InfoModel, TempModel, NewUserModel
 from fileuploader.models import FileModel
 from django.contrib.auth.models import User
 from django.db.models import Count, Max, Sum, F
@@ -12,6 +12,7 @@ from datetime import date, timedelta
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail, BadHeaderError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # from django.templatetags import fileuploader.fileuploader_tags
 # from fileuploader import fileuploader_tags
 
@@ -30,7 +31,7 @@ def temp(request):
 
     return render(request, 'template.html', {'info': info, 'info2': info2})
 
-
+    
 def forum(request, categ):
     postModelAll = PostModel.objects.all()
     if categ == 'all':
@@ -190,7 +191,7 @@ def info(request):
         info = paginator.page(paginator.num_pages)
     return render(request, 'info.html', {'info': info})
 
-
+# blog means articles
 def blog_form(request):
     if request.method == "POST":
         userInstance = User.objects.get(username = request.user)
@@ -402,7 +403,7 @@ def site_users(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         users_model = paginator.page(paginator.num_pages)
 
-    return render(request, 'site_users.html', {'users_model': users_model, 'current_time':   timezone.now()})
+    return render(request, 'site_users.html', {'users_model': users_model, 'current_time': timezone.now()})
 
 #display thread of posts and form for next post
 def thread(request, id):

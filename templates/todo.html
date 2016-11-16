@@ -1,5 +1,5 @@
 {% extends 'index.html' %} {% block homepage %}
-        <div class="container">
+<div class="container">
    <div class="row">
      <div class="col-md-12">
      <!-- or use any other number .col-md- -->
@@ -18,7 +18,7 @@
       <td class="urgent todo_list"><strong>Urgent</strong></td>
       <td class="table-cell-top todo_list">
         <ol>
-          <li>Make post and topics forms required</li>
+            <li>Make post and topics forms required</li>
           <li>Facebook allauth sign-in not working.</li>
           <li>Site needs a search function. Search in topic name, posts, articles and user list.</li>
           <li>Online User not disappearing from list when logged out. This because session doesn't expire for two weeks. <a href="http://stackoverflow.com/questions/2723052/how-to-get-the-list-of-the-authenticated-users">See stackoverflow for this issue</a></li>
@@ -43,7 +43,15 @@
       <td class="urgent todo_list"><strong>Not Urgent</strong></td>
       <td class="table-cell-top todo_list">
         <ol>
-          <li>Deploy on Bluehost</li>
+            <li>Deploy on Bluehost</li>
+            <li><strike>Issue for save_model() if new file object is created by admin, then there is no id for user_id=id Post_save may be what is needed here....So this is when 'Add File Model' is used. See admin.py in FileModel app... DONE</strike></li>
+            <li><strike>Users need to be emailed when files or articles are approved...Done</strike></li>
+            <li>Users need to be able to delete their own files but a note remains that the file was deleted, this also effects NewUserModel.</li>
+            <li>Users need to be able to delete their own articles but a note remains that the file was deleted, this also effects NewUserModel.</li>
+            <li>When a file is deleted by user or admin it needs to be deleted from fileuploaded directory, this also effects NewUserModel.</li>
+            <li><strike>When files are approved, user receives an email, which must also say when the file was submitted and when it was approved....Done</strike></li>
+            <li>Topic name needed in forum when displaying forum posts by topic.</li>
+            <li>About page, a working url</li>
           <li>Add a checkbot question to all contact forms and article submission forms</li>
           <li>Change layout of post to look less like a table and more like on Discourse site</li>
           <li>Should only be able to vote up or down once not each once as it is now.</li>
@@ -64,7 +72,7 @@
           <li>Add Bio form/edit/delete to profiles for users to describe themselves</li>
           <li>Add to user list number of posts, number of topics started, date joined</li>
           <li>Get tinyMCE to work with forms</li>
-          <li>In forum.html table column for number of users who contributed to a topic</li>
+          <li><strike>In forum.html table column for number of users who contributed to a topic...Done</strike></li>
           <li>About -> who created this site and why.... tutors needlessly repeating notes, place for tutors to discuss etc...</li>
         </ol>
       </td>

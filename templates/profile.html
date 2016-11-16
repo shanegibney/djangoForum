@@ -58,7 +58,7 @@
     <div class="col-md-12 well">
       {% for item in blog_model %} {% if item.approved %}
       <h3>{{ item.title }}</h3>
-      <h6>Category {{ item.categories }}</h6>
+      <h6>Category {{ item.get_categories_display }}</h6>
       <h5>Author <a href="{% url 'profile' item.author_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h5>
       <p>{{ item.article}}</p>
       <span id="voted{{ item.id }}" class="table-cell-center">Votes {{ item.vote }} </span> {% if user.is_authenticated %}
@@ -79,14 +79,14 @@
     <p>{{ name.username}} has not contributed any articles or {{ name.username }}'s articles may be awaiting approval.</p>
     {% endif %}
   </div>
-  <a name="files"></a>
-  <h2>Files contributed by {{ name.username }}</h2>
   <div>
     {% if file_model %}
     <div class="col-md-8 well">
+    <a name="files"></a>
+     <h2>Files contributed by {{ name.username }}</h2>
       {% for item in file_model %} {% if item.approved %}
       <h3>{{ item.title }}</h3>
-      <h6>Category {{ item.categories }}</h6>
+      <h6>Category {{ item.get_categories_display }}</h6>
       <h6>Uploaded by <a href="{% url 'profile' item.user_id %}">{{ item.author}}</a>, <span title="submitted {{ item.submitted_date }}">published {{ item.pub_date}}</span></h6>
       <p>Description {{ item.description}}</p>
       <p>Download <a href="/{{ MEDIA_URL }}{{ item.upload.name}}"><span title="download file  {{ item.upload }}" class="glyphicon glyphicon-download-alt"></span></a></p>

@@ -6,6 +6,7 @@ from django.utils import timezone
 
 
 class FileForm(forms.ModelForm):
+# class FileForm(forms.Form):
     class Meta:
         model = FileModel
         # fields = '__all__'

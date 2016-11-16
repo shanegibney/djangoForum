@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TopicModel, PostModel, BlogModel, InfoModel, TempModel
+from .models import TopicModel, PostModel, NewUserModel, BlogModel, InfoModel, TempModel
 from .forms import BlogForm, TopicForm
 
 class TopicModelAdmin(admin.ModelAdmin):
@@ -22,6 +22,11 @@ class InfoModelAdmin(admin.ModelAdmin):
     list_display = ['topicid', 'postid', 'author', 'post', 'date']
 
 admin.site.register(InfoModel, InfoModelAdmin)
+
+class NewUserModelAdmin(admin.ModelAdmin):
+    list_display = ['user', 'posts', 'files', 'articles']
+
+admin.site.register(NewUserModel, NewUserModelAdmin)
 
 class TempModelAdmin(admin.ModelAdmin):
     list_display = ['topicid', 'date', 'author']

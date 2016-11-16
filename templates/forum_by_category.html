@@ -1,10 +1,13 @@
 {% extends 'index.html' %} {% block homepage %}
 </br>
+<h2>Forum</h2>
 <div>
-  Category: {{ level }}
-</div>
-<div>
-  <p>{% if user.is_authenticated %}Add a New Topic: <a href="{% url 'topic_form' %}"><span class="glyphicon glyphicon-plus"></span></a>{% endif %}</p>
+    <p>
+        {% if user.is_authenticated %}Add a New Topic: <a href="{% url 'topic_form' %}"><span class="glyphicon glyphicon-plus"></span></a>
+        {% else %}
+        <a href="{% url 'account_login' %}">Login</a> to submit to this forum
+        {% endif %}
+    </p>
 </div>
 <div>
   <p><a href="{% url 'init' %}">{{ totalposts.count }} posts</a>,
